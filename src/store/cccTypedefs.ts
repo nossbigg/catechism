@@ -6,24 +6,22 @@ export interface CCCStore {
   meta: CCCStoreMeta
 }
 
-interface TOCNodes {
-  // eslint-disable-next-line @typescript-eslint/camelcase
+export interface TOCNodes {
   [toc_node: string]: TOCNode
 }
-interface TOCNode {
+export interface TOCNode {
   id: string
   indent_level: number
   text: string
   link: string
 }
 
-interface TOCLink {
+export interface TOCLink {
   id: string
   children: TOCLink[]
 }
 
 interface PageNodes {
-  // eslint-disable-next-line @typescript-eslint/camelcase
   [page_node: string]: PageNode
 }
 interface PageNode {
@@ -75,7 +73,6 @@ interface CCCRefElement extends PageParagraphBaseElement {
 }
 
 interface PageFootnotes {
-  // eslint-disable-next-line @typescript-eslint/camelcase
   [footnote_number: number]: PageFootnote
 }
 interface PageFootnote {

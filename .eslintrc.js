@@ -42,6 +42,7 @@ module.exports = {
         "@typescript-eslint/no-use-before-define": {
             functions: false
         },
+        "@typescript-eslint/camelcase": "off",
         "prettier/prettier": ["error", prettierRules],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
