@@ -1,10 +1,10 @@
 import { CCCStore, TOCLink, TOCNode } from './cccTypedefs'
 import {
   mergeObjectsProperties,
-  FriendlyUrlMap,
-  generateFriendlyUrlMap,
-  generatePageMetaHashmap,
+  TocIdToUrlMap,
   parseToShortLinkText,
+  generateCCCMeta,
+  generateTocToUrlMap,
 } from './cccMetaGenerator'
 
 const createTocLink = (id: string, children: TOCLink[] = []): TOCLink => ({
@@ -35,46 +35,11 @@ const createMockCCC = (): CCCStore =>
   } as unknown) as CCCStore)
 
 describe('cccMetaGenerator', () => {
-  describe('generateFriendlyUrlMap', () => {
-    const doAction = (): FriendlyUrlMap => {
-      const cccStore = createMockCCC()
-      return generateFriendlyUrlMap(cccStore.toc_link_tree, cccStore.toc_nodes)
-    }
-    const resultMap = doAction()
-
-    const assertEntryPresent = (
-      expectedUrl: string,
-      expectedPageMapping: string
-    ) => {
-      expect(expectedUrl in resultMap).toBe(true)
-      expect(resultMap[expectedUrl]).toEqual(expectedPageMapping)
-    }
-
-    it('generates a top-level node url', () => {
-      assertEntryPresent('0+link-text-1', 'toc-1')
-      assertEntryPresent('1+link-text-10', 'toc-10')
-    })
-
-    it('generates a nested level node url', () => {
-      assertEntryPresent('0.1+link-text-2', 'toc-2')
-      assertEntryPresent('0.2+link-text-3', 'toc-3')
-    })
-
-    it('skips a node which does not have a page', () => {
-      expect('2+link-text-20' in resultMap).toBe(false)
-    })
-  })
-
-  describe('generatePageMetaHashmap', () => {
+  describe('generating page meta map', () => {
     const doAction = () => {
       const cccStore = createMockCCC()
-      const urlMap: FriendlyUrlMap = {
-        '0+link-text-1': 'toc-1',
-        '0.1+link-text-2': 'toc-2',
-        '0.2+link-text-3': 'toc-3',
-        '1+link-text-10': 'toc-10',
-      }
-      return generatePageMetaHashmap(cccStore.toc_link_tree, urlMap)
+      const metadata = generateCCCMeta(cccStore)
+      return metadata.pages
     }
     const resultMap = doAction()
 
@@ -108,6 +73,54 @@ describe('cccMetaGenerator', () => {
         prev: 'toc-3',
         next: '',
       })
+    })
+
+    it('skips a node which does not have a page', () => {
+      expect('toc-20' in resultMap).toBe(false)
+    })
+  })
+
+  describe('generating url map', () => {
+    const doAction = () => {
+      const cccStore = createMockCCC()
+      const metadata = generateCCCMeta(cccStore)
+      return metadata.urlMap
+    }
+    const resultMap = doAction()
+
+    it('generates a correct url map with truncated urls', () => {
+      expect('0.1' in resultMap).toBe(true)
+      expect(resultMap['0.1']).toEqual('toc-2')
+    })
+  })
+
+  describe('generateTocToUrlMap', () => {
+    const doAction = (): TocIdToUrlMap => {
+      const cccStore = createMockCCC()
+      return generateTocToUrlMap(cccStore.toc_link_tree, cccStore.toc_nodes)
+    }
+    const resultMap = doAction()
+
+    const assertEntryPresent = (
+      expectedPageMapping: string,
+      expectedUrl: string
+    ) => {
+      expect(expectedPageMapping in resultMap).toBe(true)
+      expect(resultMap[expectedPageMapping]).toEqual(expectedUrl)
+    }
+
+    it('generates a top-level node url', () => {
+      assertEntryPresent('toc-1', '0+link-text-1')
+      assertEntryPresent('toc-10', '1+link-text-10')
+    })
+
+    it('generates a nested level node url', () => {
+      assertEntryPresent('toc-2', '0.1+link-text-2')
+      assertEntryPresent('toc-3', '0.2+link-text-3')
+    })
+
+    it('skips a node which does not have a page', () => {
+      expect('toc-20' in resultMap).toBe(false)
     })
   })
 

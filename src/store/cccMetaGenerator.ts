@@ -1,11 +1,11 @@
 import { CCCStore, TOCLink, TOCNodes } from './cccTypedefs'
 
 interface CCCMeta {
-  pages: PageMetaHashmap
-  urlMap: FriendlyUrlMap
+  pages: PageMetaMap
+  urlMap: UrlToTocIdMap
 }
 
-interface PageMetaHashmap {
+interface PageMetaMap {
   [tocId: string]: PageMeta
 }
 export interface PageMeta {
@@ -15,44 +15,47 @@ export interface PageMeta {
   url: string
 }
 
-export interface FriendlyUrlMap {
-  // maps friendly url to toc-id
-  [friendlyUrl: string]: string
+export interface TocIdToUrlMap {
+  // maps tocId to url
+  [tocId: string]: string
+}
+interface UrlToTocIdMap {
+  [url: string]: string
 }
 
 export const generateCCCMeta = (ccc: CCCStore): CCCMeta => {
   const { toc_link_tree: tocLinkTree, toc_nodes: tocNodes } = ccc
 
-  const urlMap = generateFriendlyUrlMap(tocLinkTree, tocNodes)
-  const pages = generatePageMetaHashmap(tocLinkTree, urlMap)
+  const tocIdToUrlMap = generateTocToUrlMap(tocLinkTree, tocNodes)
+
+  const urlMap = generateUrlToTocMap(tocIdToUrlMap)
+  const pages = generatePageMetaHashmap(tocLinkTree, tocIdToUrlMap)
   return { pages, urlMap }
 }
 
-export const generateFriendlyUrlMap = (
+export const generateTocToUrlMap = (
   tocLinkTree: TOCLink[],
   tocNodes: TOCNodes
-): FriendlyUrlMap => {
-  const withFriendlyUrls = tocLinkTree.map(
-    generateFriendlyUrl(tocNodes, '', true)
-  )
-  return mergeObjectsProperties(withFriendlyUrls)
+): TocIdToUrlMap => {
+  const withUrls = tocLinkTree.map(generateTocUrl(tocNodes, '', true))
+  return mergeObjectsProperties(withUrls)
 }
 
-const generateFriendlyUrl = (
+const generateTocUrl = (
   tocNodes: TOCNodes,
   prefix: string,
   isTopLevelNode: boolean
-) => (tocLink: TOCLink, index: number): FriendlyUrlMap => {
+) => (tocLink: TOCLink, index: number): TocIdToUrlMap => {
   const { id, children } = tocLink
   const hasPage = id in tocNodes
   const linkText = hasPage ? tocNodes[id].text : ''
 
   const ownUrl = hasPage ? generateShortLink(isTopLevelNode, prefix, index) : ''
   const shortLinkText = '+' + parseToShortLinkText(linkText)
-  const ownUrlMap = hasPage ? { [ownUrl + shortLinkText]: id } : {}
+  const ownUrlMap = hasPage ? { [id]: ownUrl + shortLinkText } : {}
 
   const childrenProperties = children.map(
-    generateFriendlyUrl(tocNodes, ownUrl, false)
+    generateTocUrl(tocNodes, ownUrl, false)
   )
 
   return {
@@ -89,36 +92,38 @@ export const parseToShortLinkText = (linkText: string): string => {
     .join('-')
 }
 
-interface FlippedUrlMap {
-  [tocId: string]: string
+const SHORT_LINK_PATTERN = /\+.*$/
+
+const generateUrlToTocMap = (tocIdToUrlMap: TocIdToUrlMap) => {
+  return Object.entries(tocIdToUrlMap).reduce((acc, [tocId, url]) => {
+    const urlWithoutShortLink = url.replace(SHORT_LINK_PATTERN, '')
+    return { ...acc, [urlWithoutShortLink]: tocId }
+  }, {})
 }
 
 export const generatePageMetaHashmap = (
   tocLinkTree: TOCLink[],
-  urlMap: FriendlyUrlMap
-): PageMetaHashmap => {
+  tocIdMap: TocIdToUrlMap
+): PageMetaMap => {
   const tocIds = getAllTocLinks(tocLinkTree)
-  const flippedUrlMap: FlippedUrlMap = Object.entries(urlMap).reduce(
-    (acc, [url, tocId]) => ({ ...acc, [tocId]: url }),
-    {}
-  )
 
   return tocIds
-    .map(convertTocIdToPageMeta(tocIds, flippedUrlMap))
+    .filter(tocId => tocId in tocIdMap)
+    .map(convertTocIdToPageMeta(tocIds, tocIdMap))
     .reduce((acc, pageMeta) => ({ ...acc, [pageMeta.id]: pageMeta }), {})
 }
 
-const convertTocIdToPageMeta = (
-  tocIds: string[],
-  flippedUrlMap: FlippedUrlMap
-) => (tocId: string, index: number): PageMeta => {
+const convertTocIdToPageMeta = (tocIds: string[], tocIdMap: TocIdToUrlMap) => (
+  tocId: string,
+  index: number
+): PageMeta => {
   const prevPage = index - 1 >= 0 ? tocIds[index - 1] : ''
   const nextPage = index + 1 <= tocIds.length - 1 ? tocIds[index + 1] : ''
   return {
     id: tocId,
     prev: prevPage,
     next: nextPage,
-    url: flippedUrlMap[tocId],
+    url: tocIdMap[tocId],
   }
 }
 
