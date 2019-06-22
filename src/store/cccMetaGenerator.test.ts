@@ -4,7 +4,6 @@ import {
   FriendlyUrlMap,
   generateFriendlyUrlMap,
   generatePageMetaHashmap,
-  PageMeta,
   parseToShortLinkText,
 } from './cccMetaGenerator'
 

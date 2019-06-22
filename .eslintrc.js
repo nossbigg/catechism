@@ -43,6 +43,7 @@ module.exports = {
             functions: false
         },
         "@typescript-eslint/camelcase": "off",
+        "@typescript-eslint/no-unused-vars": "error",
         "prettier/prettier": ["error", prettierRules],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
