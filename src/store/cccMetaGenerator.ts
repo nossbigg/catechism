@@ -93,10 +93,11 @@ export const parseToShortLinkText = (linkText: string): string => {
 }
 
 const SHORT_LINK_PATTERN = /\+.*$/
-
+export const stripUrlShortLink = (url: string) =>
+  url.replace(SHORT_LINK_PATTERN, '')
 const generateUrlToTocMap = (tocIdToUrlMap: TocIdToUrlMap) => {
   return Object.entries(tocIdToUrlMap).reduce((acc, [tocId, url]) => {
-    const urlWithoutShortLink = url.replace(SHORT_LINK_PATTERN, '')
+    const urlWithoutShortLink = stripUrlShortLink(url)
     return { ...acc, [urlWithoutShortLink]: tocId }
   }, {})
 }
