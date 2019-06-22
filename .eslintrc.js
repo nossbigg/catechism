@@ -32,7 +32,9 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'prettier/@typescript-eslint',
         'plugin:prettier/recommended',
+        'plugin:fp/recommended'
     ],
+    plugins: ["fp", "react-hooks"],
     rules: {
         "@typescript-eslint/explicit-function-return-type": {
             allowExpressions: true
@@ -40,6 +42,11 @@ module.exports = {
         "@typescript-eslint/no-use-before-define": {
             functions: false
         },
-        "prettier/prettier": ["error", prettierRules]
+        "prettier/prettier": ["error", prettierRules],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "fp/no-unused-expression": "off",
+        "fp/no-rest-parameters": "off",
+        "fp/no-nil": "off"
     },
 };
