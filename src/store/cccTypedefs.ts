@@ -7,6 +7,7 @@ export interface CCCStore {
 }
 
 interface TOCNodes {
+  // eslint-disable-next-line @typescript-eslint/camelcase
   [toc_node: string]: TOCNode;
 }
 interface TOCNode {
@@ -22,6 +23,7 @@ interface TOCLink {
 }
 
 interface PageNodes {
+  // eslint-disable-next-line @typescript-eslint/camelcase
   [page_node: string]: PageNode;
 }
 interface PageNode {
@@ -73,6 +75,7 @@ interface CCCRefElement extends PageParagraphBaseElement {
 }
 
 interface PageFootnotes {
+  // eslint-disable-next-line @typescript-eslint/camelcase
   [footnote_number: number]: PageFootnote;
 }
 interface PageFootnote {
