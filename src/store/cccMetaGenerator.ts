@@ -107,10 +107,10 @@ export const generatePageMetaHashmap = (
   tocIdMap: TocIdToUrlMap
 ): PageMetaMap => {
   const tocIds = getAllTocLinks(tocLinkTree)
+  const tocIdsWithPages = tocIds.filter(tocId => tocId in tocIdMap)
 
-  return tocIds
-    .filter(tocId => tocId in tocIdMap)
-    .map(convertTocIdToPageMeta(tocIds, tocIdMap))
+  return tocIdsWithPages
+    .map(convertTocIdToPageMeta(tocIdsWithPages, tocIdMap))
     .reduce((acc, pageMeta) => ({ ...acc, [pageMeta.id]: pageMeta }), {})
 }
 

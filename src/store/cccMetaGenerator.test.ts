@@ -22,9 +22,13 @@ const createTocNode = (
 const createMockCCC = (): CCCStore =>
   (({
     toc_link_tree: [
-      createTocLink('toc-1', [createTocLink('toc-2'), createTocLink('toc-3')]),
+      createTocLink('toc-1', [
+        createTocLink('toc-2'),
+        createTocLink('toc-3'),
+        createTocLink('toc-doesnt-exist-1'),
+      ]),
       createTocLink('toc-10'),
-      createTocLink('toc-20'),
+      createTocLink('toc-doesnt-exist-2'),
     ],
     toc_nodes: {
       'toc-1': createTocNode('toc-1', 'link text 1'),
@@ -48,11 +52,11 @@ describe('cccMetaGenerator', () => {
     })
 
     it('generates meta node with next/prev refs', () => {
-      expect(resultMap['toc-2']).toEqual(
+      expect(resultMap['toc-3']).toEqual(
         expect.objectContaining({
-          id: 'toc-2',
-          prev: 'toc-1',
-          next: 'toc-3',
+          id: 'toc-3',
+          prev: 'toc-2',
+          next: 'toc-10',
         })
       )
     })
@@ -76,7 +80,8 @@ describe('cccMetaGenerator', () => {
     })
 
     it('skips a node which does not have a page', () => {
-      expect('toc-20' in resultMap).toBe(false)
+      expect('toc-doesnt-exist-1' in resultMap).toBe(false)
+      expect('toc-doesnt-exist-2' in resultMap).toBe(false)
     })
   })
 
@@ -120,7 +125,8 @@ describe('cccMetaGenerator', () => {
     })
 
     it('skips a node which does not have a page', () => {
-      expect('toc-20' in resultMap).toBe(false)
+      expect('toc-doesnt-exist-1' in resultMap).toBe(false)
+      expect('toc-doesnt-exist-2' in resultMap).toBe(false)
     })
   })
 
