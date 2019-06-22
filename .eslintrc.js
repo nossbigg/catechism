@@ -1,3 +1,12 @@
+const prettierRules = {
+    "parser": "typescript",
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "jsxSingleQuote": true
+}
+
 module.exports = {
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -30,6 +39,7 @@ module.exports = {
         },
         "@typescript-eslint/no-use-before-define": {
             functions: false
-        }
+        },
+        "prettier/prettier": ["error", prettierRules]
     },
 };
