@@ -23,6 +23,11 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn test --watchAll=false"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -41,6 +46,7 @@
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^5.0.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^2.4.1",
     "prettier": "^1.18.2"
   }
 }
