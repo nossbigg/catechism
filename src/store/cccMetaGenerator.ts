@@ -1,7 +1,7 @@
 import { CCCStore, TOCLink, TOCNodes } from './cccTypedefs'
 
 interface CCCMeta {
-  pages: PageMetaMap
+  pageMetaMap: PageMetaMap
   urlMap: UrlToTocIdMap
 }
 
@@ -29,8 +29,8 @@ export const generateCCCMeta = (ccc: CCCStore): CCCMeta => {
   const tocIdToUrlMap = generateTocToUrlMap(tocLinkTree, tocNodes)
 
   const urlMap = generateUrlToTocMap(tocIdToUrlMap)
-  const pages = generatePageMetaHashmap(tocLinkTree, tocIdToUrlMap)
-  return { pages, urlMap }
+  const pageMetaMap = generatePageMetaHashmap(tocLinkTree, tocIdToUrlMap)
+  return { pageMetaMap, urlMap }
 }
 
 export const generateTocToUrlMap = (

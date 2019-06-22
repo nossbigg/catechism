@@ -39,7 +39,7 @@ describe('cccMetaGenerator', () => {
     const doAction = () => {
       const cccStore = createMockCCC()
       const metadata = generateCCCMeta(cccStore)
-      return metadata.pages
+      return metadata.pageMetaMap
     }
     const resultMap = doAction()
 
