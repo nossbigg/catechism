@@ -1,6 +1,6 @@
 import React from 'react'
 import { HashRouter, Route } from 'react-router-dom'
-import { Home } from './home/Home'
+import { Home } from './Home/Home'
 
 export const App: React.FC = () => {
   return (
