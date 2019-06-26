@@ -5,7 +5,6 @@ import { getCCCStore, CCCEnhancedStore } from 'store/cccImporter'
 import {
   PageParagraph,
   PageParagraphElement,
-  CCCRefElement,
   PageNode,
 } from 'store/cccTypedefs'
 
@@ -41,15 +40,13 @@ const renderParagraphElement = (element: PageParagraphElement) => {
     case 'spacer':
       return <br />
     case 'ref':
-      return element.text + ''
+      return <sup>{element.number} </sup>
     case 'ref-anchor':
-      return element.text + ''
-    case 'ref-ccc': {
-      const e = element as CCCRefElement
-      return `${e.ref_number} `
-    }
+      return <a href={element.link}>⇒</a>
+    case 'ref-ccc':
+      return element.ref_number + ' '
     case 'text':
-      return element.text + ''
+      return element.text + ' '
     default:
       return ''
   }

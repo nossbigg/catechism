@@ -46,38 +46,39 @@ export type PageParagraphElement =
   | TextElement
   | RefElement
   | AnchorElement
-  | SpacerElement
   | CCCRefElement
+  | SpacerElement
 
 export type PageParagraphElementType =
   | 'text'
   | 'ref'
   | 'ref-anchor'
-  | 'spacer'
   | 'ref-ccc'
+  | 'spacer'
 
 interface PageParagraphBaseElement {
   type: PageParagraphElementType
 }
 interface TextElement extends PageParagraphBaseElement {
-  text: 'text'
+  type: 'text'
+  text: string
   attrs: PageElementAttributes
 }
 interface RefElement extends PageParagraphBaseElement {
-  text: 'ref'
+  type: 'ref'
   number: number
 }
 interface AnchorElement extends PageParagraphBaseElement {
-  text: 'ref-anchor'
+  type: 'ref-anchor'
   link: string
   attrs: PageElementAttributes
 }
-interface SpacerElement extends PageParagraphBaseElement {
-  type: 'spacer'
-}
-export interface CCCRefElement extends PageParagraphBaseElement {
+interface CCCRefElement extends PageParagraphBaseElement {
   type: 'ref-ccc'
   ref_number: number
+}
+interface SpacerElement extends PageParagraphBaseElement {
+  type: 'spacer'
 }
 
 interface PageFootnotes {
