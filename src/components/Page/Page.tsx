@@ -1,30 +1,33 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { stripUrlShortLink } from 'store/cccMetaGenerator'
-import { getCCCStore } from 'store/cccImporter'
+import { getCCCStore, CCCEnhancedStore } from 'store/cccImporter'
 import {
   PageParagraph,
   PageParagraphElement,
   CCCRefElement,
+  PageNode,
 } from 'store/cccTypedefs'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
-export const Page: React.FC<RouteComponentProps> = props => {
+interface PageRouteParams {
+  [PAGE_TOC_ID_MATCH]: string
+}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface PageProps extends RouteComponentProps<PageRouteParams> {}
+
+export const Page: React.FC<PageProps> = props => {
   const cccStore = getCCCStore()
 
-  const params: Record<string, string> = props.match.params
-  const fullUrl = params[PAGE_TOC_ID_MATCH]
-  const shortUrl = stripUrlShortLink(fullUrl)
+  const shortUrl = getShortUrl(props)
+  const tocId = getPageTocId(cccStore, shortUrl)
+  if (!tocId) {
+    return null
+  }
 
-  const { extraMeta, store } = cccStore
-  const { urlMap } = extraMeta
-  const tocId = urlMap[shortUrl]
-
-  const { page_nodes } = store
-  const pageNode = page_nodes[tocId]
+  const pageNode = getPageNode(cccStore, tocId)
   const { paragraphs } = pageNode
-
   return <div>{paragraphs.map(renderParagraph)}</div>
 }
 
@@ -50,4 +53,23 @@ const renderParagraphElement = (element: PageParagraphElement) => {
     default:
       return ''
   }
+}
+
+const getShortUrl = (props: PageProps): string => {
+  const fullUrl = props.match.params[PAGE_TOC_ID_MATCH]
+  if (!fullUrl) {
+    return ''
+  }
+
+  return stripUrlShortLink(fullUrl)
+}
+
+const getPageTocId = (
+  cccStore: CCCEnhancedStore,
+  shortUrl: string
+): string | undefined => {
+  return cccStore.extraMeta.urlMap[shortUrl]
+}
+const getPageNode = (cccStore: CCCEnhancedStore, tocId: string): PageNode => {
+  return cccStore.store.page_nodes[tocId]
 }

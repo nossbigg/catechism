@@ -24,7 +24,7 @@ export interface TOCLink {
 interface PageNodes {
   [page_node: string]: PageNode
 }
-interface PageNode {
+export interface PageNode {
   id: string
   paragraphs: PageParagraph[]
   footnotes: PageFootnotes
