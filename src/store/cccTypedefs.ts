@@ -30,7 +30,7 @@ interface PageNode {
   footnotes: PageFootnotes
 }
 
-interface PageParagraph {
+export interface PageParagraph {
   elements: PageParagraphElement[]
   attrs: PageElementAttributes
 }
@@ -42,14 +42,22 @@ interface PageElementAttributes {
   heavy_header?: boolean
 }
 
-type PageParagraphElement =
+export type PageParagraphElement =
   | TextElement
   | RefElement
   | AnchorElement
   | SpacerElement
   | CCCRefElement
+
+export type PageParagraphElementType =
+  | 'text'
+  | 'ref'
+  | 'ref-anchor'
+  | 'spacer'
+  | 'ref-ccc'
+
 interface PageParagraphBaseElement {
-  type: string
+  type: PageParagraphElementType
 }
 interface TextElement extends PageParagraphBaseElement {
   text: 'text'
@@ -67,7 +75,7 @@ interface AnchorElement extends PageParagraphBaseElement {
 interface SpacerElement extends PageParagraphBaseElement {
   type: 'spacer'
 }
-interface CCCRefElement extends PageParagraphBaseElement {
+export interface CCCRefElement extends PageParagraphBaseElement {
   type: 'ref-ccc'
   ref_number: number
 }

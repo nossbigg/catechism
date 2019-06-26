@@ -1,6 +1,6 @@
 import { CCCStore, TOCLink, TOCNodes } from './cccTypedefs'
 
-interface CCCMeta {
+export interface CCCMeta {
   pageMetaMap: PageMetaMap
   urlMap: UrlToTocIdMap
 }

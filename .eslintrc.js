@@ -47,6 +47,7 @@ module.exports = {
         "prettier/prettier": ["error", prettierRules],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
+        "react/prop-types": 'off',
         "fp/no-unused-expression": "off",
         "fp/no-rest-parameters": "off",
         "fp/no-nil": "off"
