@@ -1,11 +1,4 @@
-const prettierRules = {
-    "parser": "typescript",
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true,
-    "jsxSingleQuote": true
-}
+const prettierRules = require('./.prettierrc')
 
 module.exports = {
     parser: '@typescript-eslint/parser',
