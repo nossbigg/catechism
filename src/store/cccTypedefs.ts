@@ -13,7 +13,7 @@ export interface TOCNode {
   id: string
   indent_level: number
   text: string
-  link: string
+  link?: string
 }
 
 export interface TOCLink {
