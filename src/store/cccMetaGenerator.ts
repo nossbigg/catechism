@@ -5,7 +5,7 @@ export interface CCCMeta {
   urlMap: UrlToTocIdMap
 }
 
-interface PageMetaMap {
+export interface PageMetaMap {
   [tocId: string]: PageMeta
 }
 export interface PageMeta {
