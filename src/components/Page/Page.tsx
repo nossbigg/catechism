@@ -35,14 +35,21 @@ const renderParagraph = (paragraph: PageParagraph, index: number) => {
   return <p key={index}>{elements.map(renderParagraphElement)}</p>
 }
 
-const renderParagraphElement = (element: PageParagraphElement) => {
+const renderParagraphElement = (
+  element: PageParagraphElement,
+  index: number
+) => {
   switch (element.type) {
     case 'spacer':
-      return <br />
+      return <br key={index} />
     case 'ref':
-      return <sup>{element.number} </sup>
+      return <sup key={index}>{element.number}</sup>
     case 'ref-anchor':
-      return <a href={element.link}>⇒</a>
+      return (
+        <a key={index} href={element.link}>
+          ⇒
+        </a>
+      )
     case 'ref-ccc':
       return element.ref_number + ' '
     case 'text':
