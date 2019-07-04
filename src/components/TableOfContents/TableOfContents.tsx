@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getCCCStore } from 'store/cccImporter'
 import { TOCLink, TOCNodes } from 'store/cccTypedefs'
 import { PageMetaMap } from 'store/cccMetaGenerator'
+import { Layout } from '../Layout/Layout'
 
 export const TableOfContents: React.FC = () => {
   const cccStore = getCCCStore()
@@ -10,7 +11,11 @@ export const TableOfContents: React.FC = () => {
   const { toc_link_tree, toc_nodes } = store
   const { pageMetaMap } = extraMeta
 
-  return renderTableOfContents(toc_link_tree, toc_nodes, pageMetaMap)
+  return (
+    <Layout>
+      {renderTableOfContents(toc_link_tree, toc_nodes, pageMetaMap)}
+    </Layout>
+  )
 }
 
 const renderTableOfContents = (

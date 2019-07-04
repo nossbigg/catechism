@@ -7,6 +7,7 @@ import {
   PageParagraphElement,
   PageNode,
 } from 'store/cccTypedefs'
+import { Layout } from 'components/Layout/Layout'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -27,7 +28,7 @@ export const Page: React.FC<PageProps> = props => {
 
   const pageNode = getPageNode(cccStore, tocId)
   const { paragraphs } = pageNode
-  return <div>{paragraphs.map(renderParagraph)}</div>
+  return <Layout>{paragraphs.map(renderParagraph)}</Layout>
 }
 
 const renderParagraph = (paragraph: PageParagraph, index: number) => {
