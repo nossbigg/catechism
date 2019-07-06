@@ -21,7 +21,7 @@ export interface TOCLink {
   children: TOCLink[]
 }
 
-interface PageNodes {
+export interface PageNodes {
   [page_node: string]: PageNode
 }
 export interface PageNode {
@@ -73,7 +73,7 @@ interface AnchorElement extends PageParagraphBaseElement {
   link: string
   attrs: PageElementAttributes
 }
-interface CCCRefElement extends PageParagraphBaseElement {
+export interface CCCRefElement extends PageParagraphBaseElement {
   type: 'ref-ccc'
   ref_number: number
 }

@@ -3,8 +3,8 @@ import {
   mergeObjectsProperties,
   TocIdToUrlMap,
   parseToShortLinkText,
-  generateCCCMeta,
-  generateTocToUrlMap,
+  makeCCCMeta,
+  makeTocToUrlMap,
 } from './cccMetaGenerator'
 
 const createTocLink = (id: string, children: TOCLink[] = []): TOCLink => ({
@@ -36,13 +36,14 @@ const createMockCCC = (): CCCStore =>
       'toc-3': createTocNode('toc-3', 'link text 3'),
       'toc-10': createTocNode('toc-10', 'link text 10'),
     },
+    page_nodes: {},
   } as unknown) as CCCStore)
 
 describe('cccMetaGenerator', () => {
   describe('generating page meta map', () => {
     const doAction = () => {
       const cccStore = createMockCCC()
-      const metadata = generateCCCMeta(cccStore)
+      const metadata = makeCCCMeta(cccStore)
       return metadata.pageMetaMap
     }
     const resultMap = doAction()
@@ -88,7 +89,7 @@ describe('cccMetaGenerator', () => {
   describe('generating url map', () => {
     const doAction = () => {
       const cccStore = createMockCCC()
-      const metadata = generateCCCMeta(cccStore)
+      const metadata = makeCCCMeta(cccStore)
       return metadata.urlMap
     }
     const resultMap = doAction()
@@ -102,7 +103,7 @@ describe('cccMetaGenerator', () => {
   describe('generateTocToUrlMap', () => {
     const doAction = (): TocIdToUrlMap => {
       const cccStore = createMockCCC()
-      return generateTocToUrlMap(cccStore.toc_link_tree, cccStore.toc_nodes)
+      return makeTocToUrlMap(cccStore.toc_link_tree, cccStore.toc_nodes)
     }
     const resultMap = doAction()
 
