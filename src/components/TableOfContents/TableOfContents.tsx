@@ -1,18 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import { getCCCStore } from 'store/cccImporter'
 import { TOCLink, TOCNodes } from 'store/cccTypedefs'
 import { PageMetaMap } from 'store/cccMetaGenerator'
 import { Layout } from '../Layout/Layout'
 
-export const TableOfContents: React.FC = () => {
+export const TableOfContents: React.FC<RouteComponentProps> = props => {
   const cccStore = getCCCStore()
   const { store, extraMeta } = cccStore
   const { toc_link_tree, toc_nodes } = store
   const { pageMetaMap } = extraMeta
 
   return (
-    <Layout>
+    <Layout routeHistory={props.history}>
       {renderTableOfContents(toc_link_tree, toc_nodes, pageMetaMap)}
     </Layout>
   )

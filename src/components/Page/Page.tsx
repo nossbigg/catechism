@@ -28,7 +28,11 @@ export const Page: React.FC<PageProps> = props => {
 
   const pageNode = getPageNode(cccStore, tocId)
   const { paragraphs } = pageNode
-  return <Layout>{paragraphs.map(renderParagraph)}</Layout>
+  return (
+    <Layout routeHistory={props.history}>
+      {paragraphs.map(renderParagraph)}
+    </Layout>
+  )
 }
 
 const renderParagraph = (paragraph: PageParagraph, index: number) => {
