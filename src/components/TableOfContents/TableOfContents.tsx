@@ -4,8 +4,24 @@ import { getCCCStore } from 'store/cccImporter'
 import { TOCLink, TOCNodes } from 'store/cccTypedefs'
 import { PageMetaMap } from 'store/cccMetaGenerator'
 import { Layout } from '../Layout/Layout'
+import { makeStyles } from '@material-ui/core'
+
+const useStyles = makeStyles({
+  ul: {
+    paddingLeft: 40,
+    lineHeight: 1.5,
+    '& ul': {
+      paddingLeft: 20,
+    },
+    '& li:last-child': {
+      marginBottom: 10,
+    },
+  },
+})
 
 export const TableOfContents: React.FC<RouteComponentProps> = props => {
+  const styles = useStyles()
+
   const cccStore = getCCCStore()
   const { store, extraMeta } = cccStore
   const { toc_link_tree, toc_nodes } = store
@@ -13,7 +29,7 @@ export const TableOfContents: React.FC<RouteComponentProps> = props => {
 
   return (
     <Layout routeHistory={props.history}>
-      {renderTableOfContents(toc_link_tree, toc_nodes, pageMetaMap)}
+      {renderTableOfContents(toc_link_tree, toc_nodes, pageMetaMap, styles)}
     </Layout>
   )
 }
@@ -21,10 +37,13 @@ export const TableOfContents: React.FC<RouteComponentProps> = props => {
 const renderTableOfContents = (
   tocTree: TOCLink[],
   tocNodes: TOCNodes,
-  pageMetaMap: PageMetaMap
+  pageMetaMap: PageMetaMap,
+  styles: Record<string, string>
 ) => {
   return (
-    <ul>{tocTree.map(renderTableOfContentsNode(tocNodes, pageMetaMap))}</ul>
+    <ul className={styles.ul}>
+      {tocTree.map(renderTableOfContentsNode(tocNodes, pageMetaMap))}
+    </ul>
   )
 }
 
