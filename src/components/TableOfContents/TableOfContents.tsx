@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles({
   ul: {
-    paddingLeft: 40,
+    paddingLeft: 20,
     lineHeight: 1.5,
     '& ul': {
       paddingLeft: 20,

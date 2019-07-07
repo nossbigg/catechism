@@ -18,15 +18,26 @@ import * as H from 'history'
 
 const useStyles = makeStyles({
   list: {
-    width: 200,
+    fontFamily: 'Cinzel',
+    width: 250,
   },
   listHeader: {
-    padding: 10,
+    fontSize: '1.5em',
+    padding: 20,
     margin: 0,
-    marginTop: 20,
+    marginTop: 10,
     borderBottom: '1px solid gray',
   },
-  listItem: { paddingTop: 20, paddingBottom: 20, paddingLeft: 10 },
+  listItem: { padding: 20 },
+  appBar: {
+    fontFamily: 'Cinzel',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '1.4em',
+  },
+  menuIcon: {
+    marginRight: 10,
+  },
 })
 
 type MUIContainerWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false
@@ -38,7 +49,7 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = props => {
-  const classes = useStyles()
+  const styles = useStyles()
   const { mainContainerWidth, toolbarContainerWidth } = props
   const [drawerState, setDrawerState] = useState(false)
 
@@ -51,11 +62,11 @@ export const Layout: React.FC<LayoutProps> = props => {
           <Toolbar>
             <Container
               maxWidth={toolbarContainerWidth || DEFAULT_TOOLBAR_WIDTH}
-              style={{ display: 'flex', alignItems: 'center' }}
+              className={styles.appBar}
             >
               <Menu
                 onClick={() => setDrawerState(true)}
-                style={{ marginRight: 10 }}
+                className={styles.menuIcon}
               />
               Catechism
             </Container>
@@ -64,15 +75,15 @@ export const Layout: React.FC<LayoutProps> = props => {
       </HideOnScroll>
       <DummyToolbar />
       <Drawer open={drawerState} onClose={dismissDrawer}>
-        <Box className={classes.list}>
+        <Box className={styles.list}>
           <List component='nav' disablePadding>
-            <ListItemText className={classes.listHeader}>
+            <ListItemText disableTypography className={styles.listHeader}>
               Catechism
             </ListItemText>
             <ListItem
               button
               disableGutters
-              className={classes.listItem}
+              className={styles.listItem}
               onClick={() => {
                 // eslint-disable-next-line fp/no-mutating-methods
                 props.routeHistory.push(APP_ROUTES.TABLE_OF_CONTENTS)
