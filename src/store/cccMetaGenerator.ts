@@ -41,7 +41,7 @@ export const makeCCCMeta = (ccc: CCCStore): CCCMeta => {
   const tocIdToUrlMap = makeTocToUrlMap(tocLinkTree, tocNodes)
 
   const urlMap = makeUrlToTocMap(tocIdToUrlMap)
-  const pageMetaMap = makePageMetaHashmap(tocLinkTree, tocIdToUrlMap)
+  const pageMetaMap = makePageMetaHashmap(tocLinkTree, pageNodes, tocIdToUrlMap)
   const cccRefRangeTree = makeCCCRefRangeTree(tocLinkTree, pageNodes)
   return { pageMetaMap, urlMap, cccRefRangeTree }
 }
@@ -115,10 +115,11 @@ const makeUrlToTocMap = (tocIdToUrlMap: TocIdToUrlMap) => {
 
 export const makePageMetaHashmap = (
   tocLinkTree: TOCLink[],
+  pageNodes: PageNodes,
   tocIdMap: TocIdToUrlMap
 ): PageMetaMap => {
   const tocIds = getAllTocLinks(tocLinkTree)
-  const tocIdsWithPages = tocIds.filter(tocId => tocId in tocIdMap)
+  const tocIdsWithPages = tocIds.filter(tocId => tocId in pageNodes)
 
   return tocIdsWithPages
     .map(convertTocIdToPageMeta(tocIdsWithPages, tocIdMap))
@@ -172,6 +173,9 @@ interface RangeTreeNode {
 const getRefRangeForPage = (pageNode: PageNode): RangeTreeNode | undefined => {
   const { id, paragraphs } = pageNode
 
+  if (paragraphs.length === 0) {
+    return undefined
+  }
   const paragraphElements = paragraphs.map(p => p.elements).flat()
   const cccRefNumbers = paragraphElements
     .filter(e => e.type === 'ref-ccc')

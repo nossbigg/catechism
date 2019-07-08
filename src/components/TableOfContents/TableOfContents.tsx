@@ -54,7 +54,6 @@ const renderTableOfContentsNode = (
 ) => (tocLink: TOCLink, index: number) => {
   const { children, id } = tocLink
   const { text, link } = tocNodes[id]
-  const { url } = pageMetaMap[id]
 
   const renderedChildren =
     children.length > 0 ? (
@@ -62,7 +61,11 @@ const renderTableOfContentsNode = (
     ) : (
       <></>
     )
-  const renderedText = link ? <Link to={`/p/${url}`}>{text}</Link> : text
+  const renderedText = link ? (
+    <Link to={`/p/${pageMetaMap[id].url}`}>{text}</Link>
+  ) : (
+    text
+  )
 
   return (
     <li key={index}>
