@@ -1,6 +1,6 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { stripUrlShortLink } from 'store/cccMetaGenerator'
+import { stripUrlShortLink, PageMetaMap } from 'store/cccMetaGenerator'
 import { getCCCStore, CCCEnhancedStore } from 'store/cccImporter'
 import {
   PageParagraph,
@@ -8,6 +8,11 @@ import {
   PageNode,
 } from 'store/cccTypedefs'
 import { Layout } from 'components/Layout/Layout'
+import { Box, IconButton } from '@material-ui/core'
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/styles'
+import { historyPush } from '../../utils/reactRouterUtils'
+import * as H from 'history'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -18,6 +23,7 @@ interface PageRouteParams {
 interface PageProps extends RouteComponentProps<PageRouteParams> {}
 
 export const Page: React.FC<PageProps> = props => {
+  const styles = useStyles()
   const cccStore = getCCCStore()
 
   const shortUrl = getShortUrl(props)
@@ -31,6 +37,7 @@ export const Page: React.FC<PageProps> = props => {
   return (
     <Layout routeHistory={props.history}>
       {paragraphs.map(renderParagraph)}
+      {renderPageControls(styles, tocId, cccStore, props.history)}
     </Layout>
   )
 }
@@ -64,6 +71,48 @@ const renderParagraphElement = (
   }
 }
 
+const renderPageControls = (
+  styles: Record<string, string>,
+  tocId: string,
+  cccStore: CCCEnhancedStore,
+  history: H.History
+) => {
+  const { pageMetaMap } = cccStore.extraMeta
+  const { next, prev } = pageMetaMap[tocId]
+
+  const hasNext = hasUrl(next, pageMetaMap)
+  const hasPrev = hasUrl(prev, pageMetaMap)
+
+  return (
+    <Box className={styles.pageControls}>
+      {hasPrev && (
+        <IconButton
+          className={`${styles.pageControlButton} ${styles.pageLeftButton}`}
+          onClick={() =>
+            historyPush(history, `/p/${getUrl(prev, pageMetaMap)}`)
+          }
+        >
+          <KeyboardArrowLeft fontSize='large' />
+        </IconButton>
+      )}
+      {hasNext && (
+        <IconButton
+          className={`${styles.pageControlButton} ${styles.pageRightButton}`}
+          onClick={() =>
+            historyPush(history, `/p/${getUrl(next, pageMetaMap)}`)
+          }
+        >
+          <KeyboardArrowRight fontSize='large' />
+        </IconButton>
+      )}
+    </Box>
+  )
+}
+
+const hasUrl = (tocId: string, pageMetaMap: PageMetaMap) => tocId in pageMetaMap
+const getUrl = (tocId: string, pageMetaMap: PageMetaMap) =>
+  pageMetaMap[tocId].url
+
 const getShortUrl = (props: PageProps): string => {
   const fullUrl = props.match.params[PAGE_TOC_ID_MATCH]
   if (!fullUrl) {
@@ -82,3 +131,12 @@ const getPageTocId = (
 const getPageNode = (cccStore: CCCEnhancedStore, tocId: string): PageNode => {
   return cccStore.store.page_nodes[tocId]
 }
+
+const useStyles = makeStyles({
+  pageControls: { display: 'flex' },
+  pageLeftButton: {},
+  pageRightButton: { marginLeft: 'auto' },
+  pageControlButton: {
+    border: '1px solid gray',
+  },
+})
