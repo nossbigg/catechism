@@ -1,7 +1,7 @@
 import React from 'react'
-import { RouteComponentProps } from 'react-router'
 import { getCCCStore } from 'store/cccImporter'
 import { findPage } from 'store/cccMetaGenerator'
+import { AppRouteType } from 'components/App'
 
 export const CCC_REFERENCE_MATCH = 'CCC_REFERENCE_MATCH'
 
@@ -9,7 +9,7 @@ interface PageRouteParams {
   [CCC_REFERENCE_MATCH]: string
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface CCCReferenceProps extends RouteComponentProps<PageRouteParams> {}
+interface CCCReferenceProps extends AppRouteType<PageRouteParams> {}
 
 export const CCCReference: React.FC<CCCReferenceProps> = props => {
   const cccReferenceMatch = props.match.params[CCC_REFERENCE_MATCH]

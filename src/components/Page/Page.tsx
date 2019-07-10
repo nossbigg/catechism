@@ -1,7 +1,6 @@
 import React from 'react'
-import { RouteComponentProps } from 'react-router-dom'
 import { stripUrlShortLink, PageMetaMap } from 'store/cccMetaGenerator'
-import { getCCCStore, CCCEnhancedStore } from 'store/cccImporter'
+import { CCCEnhancedStore } from 'store/cccImporter'
 import {
   PageParagraph,
   PageParagraphElement,
@@ -13,18 +12,20 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/styles'
 import { historyPush } from '../../utils/reactRouterUtils'
 import * as H from 'history'
+import { AppRouteType } from 'components/App'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
 interface PageRouteParams {
   [PAGE_TOC_ID_MATCH]: string
 }
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface PageProps extends RouteComponentProps<PageRouteParams> {}
+interface PageProps extends AppRouteType<PageRouteParams> {}
 
 export const Page: React.FC<PageProps> = props => {
+  const { cccStore } = props
   const styles = useStyles()
-  const cccStore = getCCCStore()
 
   const shortUrl = getShortUrl(props)
   const tocId = getPageTocId(cccStore, shortUrl)

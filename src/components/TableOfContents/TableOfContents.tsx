@@ -1,10 +1,10 @@
 import React from 'react'
-import { Link, RouteComponentProps } from 'react-router-dom'
-import { getCCCStore } from 'store/cccImporter'
+import { Link } from 'react-router-dom'
 import { TOCLink, TOCNodes } from 'store/cccTypedefs'
 import { PageMetaMap } from 'store/cccMetaGenerator'
 import { Layout } from '../Layout/Layout'
 import { makeStyles } from '@material-ui/core'
+import { AppRouteType } from 'components/App'
 
 const useStyles = makeStyles({
   ul: {
@@ -19,10 +19,13 @@ const useStyles = makeStyles({
   },
 })
 
-export const TableOfContents: React.FC<RouteComponentProps> = props => {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface TableOfContentsProps extends AppRouteType {}
+
+export const TableOfContents: React.FC<TableOfContentsProps> = props => {
+  const { cccStore } = props
   const styles = useStyles()
 
-  const cccStore = getCCCStore()
   const { store, extraMeta } = cccStore
   const { toc_link_tree, toc_nodes } = store
   const { pageMetaMap } = extraMeta
