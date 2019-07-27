@@ -11,6 +11,7 @@ export interface CCCMeta {
   pageMetaMap: PageMetaMap
   urlMap: UrlToTocIdMap
   cccRefRangeTree: CCCRefRangeTree
+  breadcrumbsMap: BreadcrumbsMap
 }
 
 export interface PageMetaMap {
@@ -31,6 +32,15 @@ interface UrlToTocIdMap {
   [url: string]: string
 }
 
+interface BreadcrumbsMap {
+  [tocId: string]: PageBreadcrumb
+}
+
+interface PageBreadcrumb {
+  id: string
+  parent: string
+}
+
 export const makeCCCMeta = (ccc: CCCStore): CCCMeta => {
   const {
     toc_link_tree: tocLinkTree,
@@ -43,8 +53,35 @@ export const makeCCCMeta = (ccc: CCCStore): CCCMeta => {
   const urlMap = makeUrlToTocMap(tocIdToUrlMap)
   const pageMetaMap = makePageMetaHashmap(tocLinkTree, pageNodes, tocIdToUrlMap)
   const cccRefRangeTree = makeCCCRefRangeTree(tocLinkTree, pageNodes)
-  return { pageMetaMap, urlMap, cccRefRangeTree }
+  const breadcrumbsMap = makeBreadcrumbsMap(tocLinkTree, '')
+
+  return { pageMetaMap, urlMap, cccRefRangeTree, breadcrumbsMap }
 }
+
+const makeBreadcrumbsMap = (
+  crumbs: TOCLink[],
+  parent: string
+): BreadcrumbsMap => {
+  const currentCrumbs = crumbs.map(tocLink => ({
+    [tocLink.id]: makeBreadcrumb(parent)(tocLink),
+  }))
+
+  const childrenBreadcrumbs = crumbs
+    .filter(tocLink => tocLink.children.length > 0)
+    .map(tocLink => makeBreadcrumbsMap(tocLink.children, tocLink.id))
+
+  return {
+    ...mergeObjectsProperties(currentCrumbs),
+    ...mergeObjectsProperties(childrenBreadcrumbs),
+  }
+}
+
+const makeBreadcrumb = (parent: string) => (
+  tocLink: TOCLink
+): PageBreadcrumb => ({
+  id: tocLink.id,
+  parent,
+})
 
 export const makeTocToUrlMap = (
   tocLinkTree: TOCLink[],

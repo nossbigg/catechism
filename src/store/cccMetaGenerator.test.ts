@@ -110,6 +110,35 @@ describe('cccMetaGenerator', () => {
     })
   })
 
+  describe('generating breadcrumbs map', () => {
+    const doAction = () => {
+      const cccStore = createMockCCC()
+      const metadata = makeCCCMeta(cccStore)
+      return metadata.breadcrumbsMap
+    }
+    const breadcrumbMap = doAction()
+
+    it('generates a breadcrumb', () => {
+      const toc1 = breadcrumbMap['toc-1']
+      expect(toc1.id).toEqual('toc-1')
+      expect(toc1.parent).not.toBeUndefined()
+    })
+
+    it('generates a top-level breadcrumb', () => {
+      const expectedKeysWithNoParent = ['toc-1', 'toc-10', 'toc-no-page-2']
+      expectedKeysWithNoParent.forEach(key =>
+        expect(breadcrumbMap[key].parent).toEqual('')
+      )
+    })
+
+    it('generates a child breadcrumb', () => {
+      const expectedChildPagesOfToc1 = ['toc-2', 'toc-3', 'toc-no-page-1']
+      expectedChildPagesOfToc1.forEach(key =>
+        expect(breadcrumbMap[key].parent).toEqual('toc-1')
+      )
+    })
+  })
+
   describe('generateTocToUrlMap', () => {
     const doAction = (): TocIdToUrlMap => {
       const cccStore = createMockCCC()
