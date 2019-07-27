@@ -1,4 +1,4 @@
-import { makeCCCMeta, CCCMeta } from './cccMetaGenerator'
+import { makeCCCMeta, CCCMeta } from '../cccMetaGenerator/cccMetaGenerator'
 import { CCCStore } from './cccTypedefs'
 import cccRaw from './ccc.json'
 

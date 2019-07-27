@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { TOCLink, TOCNodes } from 'store/cccTypedefs'
-import { PageMetaMap } from 'store/cccMetaGenerator'
+import { PageMetaMap } from 'cccMetaGenerator/cccMetaGenerator'
 import { Layout } from '../Layout/Layout'
 import { makeStyles } from '@material-ui/core'
 import { AppRouteType } from 'components/App'

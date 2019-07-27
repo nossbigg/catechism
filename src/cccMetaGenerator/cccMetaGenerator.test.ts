@@ -1,4 +1,4 @@
-import { CCCStore, TOCLink, TOCNode, PageNode } from './cccTypedefs'
+import { CCCStore, TOCLink, TOCNode, PageNode } from '../store/cccTypedefs'
 import {
   mergeObjectsProperties,
   TocIdToUrlMap,

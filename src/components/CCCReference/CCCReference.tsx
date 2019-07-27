@@ -1,6 +1,6 @@
 import React from 'react'
 import { getCCCStore } from 'store/cccImporter'
-import { findPage } from 'store/cccMetaGenerator'
+import { findPage } from 'cccMetaGenerator/cccMetaGenerator'
 import { AppRouteType } from 'components/App'
 
 export const CCC_REFERENCE_MATCH = 'CCC_REFERENCE_MATCH'

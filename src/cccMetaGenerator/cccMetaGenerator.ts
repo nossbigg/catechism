@@ -5,7 +5,7 @@ import {
   PageNodes,
   PageNode,
   CCCRefElement,
-} from './cccTypedefs'
+} from '../store/cccTypedefs'
 
 export interface CCCMeta {
   pageMetaMap: PageMetaMap
