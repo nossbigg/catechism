@@ -1,8 +1,6 @@
 import React from 'react'
-import {
-  stripUrlShortLink,
-  PageMetaMap,
-} from 'cccMetaGenerator/cccMetaGenerator'
+import { PageMetaMap } from 'cccMetaGenerator/makePageMetaMap'
+import { stripUrlShortLink } from 'cccMetaGenerator/makeUrlMap'
 import { CCCEnhancedStore } from 'store/cccImporter'
 import {
   PageParagraph,
