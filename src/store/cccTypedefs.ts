@@ -77,7 +77,7 @@ export interface CCCRefElement extends PageParagraphBaseElement {
   type: 'ref-ccc'
   ref_number: number
 }
-interface SpacerElement extends PageParagraphBaseElement {
+export interface SpacerElement extends PageParagraphBaseElement {
   type: 'spacer'
 }
 

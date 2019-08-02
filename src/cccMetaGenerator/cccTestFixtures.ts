@@ -1,5 +1,11 @@
 import { CCCStore } from '../store/cccTypedefs'
-import { createTocLink, createTocNode, createPageNode } from './testHelpers'
+import {
+  createTocLink,
+  createTocNode,
+  createPageNode,
+  createParagraphWithCCCRefElements,
+  createParagraph,
+} from './testHelpers'
 
 export const createMockCCC = (): CCCStore =>
   (({
@@ -21,9 +27,15 @@ export const createMockCCC = (): CCCStore =>
       'toc-no-page-2': createTocNode('toc-no-page-2', 'link text x'),
     },
     page_nodes: {
-      'toc-1': createPageNode('toc-1'),
-      'toc-2': createPageNode('toc-2'),
-      'toc-3': createPageNode('toc-3'),
-      'toc-10': createPageNode('toc-10'),
+      'toc-1': createPageNode('toc-1', [
+        createParagraphWithCCCRefElements([1, 3]),
+      ]),
+      'toc-2': createPageNode('toc-2', [createParagraph()]),
+      'toc-3': createPageNode('toc-3', [
+        createParagraphWithCCCRefElements([4, 6]),
+      ]),
+      'toc-10': createPageNode('toc-10', [
+        createParagraphWithCCCRefElements([7, 8]),
+      ]),
     },
   } as unknown) as CCCStore)

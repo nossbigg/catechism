@@ -6,6 +6,7 @@ import {
   makeCCCMeta,
   makeTocToUrlMap,
 } from './cccMetaGenerator'
+import { RangeTreeNode } from './makeRefRangeTree'
 
 describe('cccMetaGenerator', () => {
   describe('generating page meta map', () => {
@@ -94,6 +95,30 @@ describe('cccMetaGenerator', () => {
       expectedChildPagesOfToc1.forEach(key =>
         expect(breadcrumbMap[key].parent).toEqual('toc-1')
       )
+    })
+  })
+
+  describe('generating ref range tree', () => {
+    const doAction = () => {
+      const cccStore = createMockCCC()
+      const metadata = makeCCCMeta(cccStore)
+      return metadata.cccRefRangeTree.root
+    }
+    const rootNode = doAction()
+
+    it('generates a top-level element', () => {
+      expect(rootNode.min).toBe(1)
+      expect(rootNode.max).toBe(8)
+      expect(rootNode.tocId).toBeUndefined()
+    })
+
+    it('generates a leaf element', () => {
+      const { right } = rootNode
+      expect((right as RangeTreeNode).tocId).toBe('toc-10')
+    })
+
+    it('matches snapshot', () => {
+      expect(rootNode).toMatchSnapshot()
     })
   })
 

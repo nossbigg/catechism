@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cccMetaGenerator generating ref range tree matches snapshot 1`] = `
+Object {
+  "left": Object {
+    "left": Object {
+      "left": undefined,
+      "max": 3,
+      "min": 1,
+      "right": undefined,
+      "tocId": "toc-1",
+    },
+    "max": 6,
+    "min": 1,
+    "right": Object {
+      "left": undefined,
+      "max": 6,
+      "min": 4,
+      "right": undefined,
+      "tocId": "toc-3",
+    },
+    "tocId": undefined,
+  },
+  "max": 8,
+  "min": 1,
+  "right": Object {
+    "left": undefined,
+    "max": 8,
+    "min": 7,
+    "right": undefined,
+    "tocId": "toc-10",
+  },
+  "tocId": undefined,
+}
+`;

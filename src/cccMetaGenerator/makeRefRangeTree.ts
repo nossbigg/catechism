@@ -8,7 +8,7 @@ import {
 export interface CCCRefRangeTree {
   root: RangeTreeNode
 }
-interface RangeTreeNode {
+export interface RangeTreeNode {
   left: RangeTreeNode | undefined
   right: RangeTreeNode | undefined
   min: number
@@ -70,7 +70,10 @@ const getRefRangeForPage = (pageNode: PageNode): RangeTreeNode | undefined => {
   if (paragraphs.length === 0) {
     return undefined
   }
-  const paragraphElements = paragraphs.map(p => p.elements).flat()
+
+  const paragraphElements = paragraphs
+    .map(p => p.elements)
+    .reduce((acc, curr) => [...acc, ...curr], [])
   const cccRefNumbers = paragraphElements
     .filter(e => e.type === 'ref-ccc')
     .map(e => {
