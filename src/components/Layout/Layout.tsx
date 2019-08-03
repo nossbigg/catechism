@@ -86,11 +86,11 @@ export const Layout: React.FC<LayoutProps> = props => {
               className={styles.listItem}
               onClick={() => {
                 // eslint-disable-next-line fp/no-mutating-methods
-                props.routeHistory.push(APP_ROUTES.TABLE_OF_CONTENTS)
+                props.routeHistory.push(APP_ROUTES.INDEX)
                 dismissDrawer()
               }}
             >
-              Table of Contents
+              Index
             </ListItem>
           </List>
         </Box>

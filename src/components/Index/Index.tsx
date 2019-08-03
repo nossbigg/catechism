@@ -20,9 +20,9 @@ const useStyles = makeStyles({
 })
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TableOfContentsProps extends AppRouteType {}
+interface IndexProps extends AppRouteType {}
 
-export const TableOfContents: React.FC<TableOfContentsProps> = props => {
+export const Index: React.FC<IndexProps> = props => {
   const { cccStore } = props
   const styles = useStyles()
 
@@ -32,12 +32,12 @@ export const TableOfContents: React.FC<TableOfContentsProps> = props => {
 
   return (
     <Layout routeHistory={props.history}>
-      {renderTableOfContents(toc_link_tree, toc_nodes, pageMetaMap, styles)}
+      {renderIndex(toc_link_tree, toc_nodes, pageMetaMap, styles)}
     </Layout>
   )
 }
 
-const renderTableOfContents = (
+const renderIndex = (
   tocTree: TOCLink[],
   tocNodes: TOCNodes,
   pageMetaMap: PageMetaMap,
@@ -45,12 +45,12 @@ const renderTableOfContents = (
 ) => {
   return (
     <ul className={styles.ul}>
-      {tocTree.map(renderTableOfContentsNode(tocNodes, pageMetaMap))}
+      {tocTree.map(renderIndexNode(tocNodes, pageMetaMap))}
     </ul>
   )
 }
 
-const renderTableOfContentsNode = (
+const renderIndexNode = (
   tocNodes: TOCNodes,
   pageMetaMap: PageMetaMap
   // eslint-disable-next-line react/display-name
@@ -60,7 +60,7 @@ const renderTableOfContentsNode = (
 
   const renderedChildren =
     children.length > 0 ? (
-      <ul>{children.map(renderTableOfContentsNode(tocNodes, pageMetaMap))}</ul>
+      <ul>{children.map(renderIndexNode(tocNodes, pageMetaMap))}</ul>
     ) : (
       <></>
     )
