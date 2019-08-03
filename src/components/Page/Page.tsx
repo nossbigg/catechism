@@ -12,6 +12,7 @@ import { Box, IconButton } from '@material-ui/core'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/styles'
 import { historyPush } from '../../utils/reactRouterUtils'
+import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
 import * as H from 'history'
 import { AppRouteType } from 'components/App'
 
@@ -38,6 +39,7 @@ export const Page: React.FC<PageProps> = props => {
   const { paragraphs } = pageNode
   return (
     <Layout routeHistory={props.history}>
+      <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
       {paragraphs.map(renderParagraph)}
       {renderPageControls(styles, tocId, cccStore, props.history)}
     </Layout>
