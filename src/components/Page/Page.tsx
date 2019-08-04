@@ -16,6 +16,7 @@ import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
 import * as H from 'history'
 import { AppRouteType } from 'components/App'
 import { useScrollToTopOnPathChange } from '../common/hooks/useScrollToTopOnRouteChange'
+import classnames from 'classnames'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -40,19 +41,28 @@ export const Page: React.FC<PageProps> = props => {
 
   const pageNode = getPageNode(cccStore, tocId)
   const { paragraphs } = pageNode
+
   return (
     <Layout routeHistory={props.history}>
       <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
-      {paragraphs.map(renderParagraph)}
+      {paragraphs.map(renderParagraph(styles))}
       {renderPageControls(styles, tocId, cccStore, props.history)}
     </Layout>
   )
 }
 
-const renderParagraph = (paragraph: PageParagraph, index: number) => {
-  const { elements } = paragraph
-  return <p key={index}>{elements.map(renderParagraphElement)}</p>
-}
+const renderParagraph = (styles: Record<string, string>) =>
+  function renderParagraph(paragraph: PageParagraph, index: number) {
+    const { elements, attrs } = paragraph
+    return (
+      <p
+        key={index}
+        className={classnames({ [styles.paragraphIndented]: !!attrs.indent })}
+      >
+        {elements.map(renderParagraphElement)}
+      </p>
+    )
+  }
 
 const renderParagraphElement = (
   element: PageParagraphElement,
@@ -142,5 +152,8 @@ const useStyles = makeStyles({
   pageRightButton: { marginLeft: 'auto' },
   pageControlButton: {
     border: '1px solid gray',
+  },
+  paragraphIndented: {
+    margin: '0 5vh',
   },
 })
