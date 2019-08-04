@@ -88,7 +88,7 @@ const createBreadcrumbLink = (pageMetaMap: PageMetaMap, lastIndex: number) =>
     const pageMeta = pageMetaMap[id]
 
     if (!pageMeta) {
-      return <div>{breadcrumbText}</div>
+      return <div key={index}>{breadcrumbText}</div>
     }
 
     return (
