@@ -15,6 +15,7 @@ import { historyPush } from '../../utils/reactRouterUtils'
 import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
 import * as H from 'history'
 import { AppRouteType } from 'components/App'
+import { useScrollToTopOnPathChange } from '../common/hooks/useScrollToTopOnRouteChange'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -31,6 +32,8 @@ export const Page: React.FC<PageProps> = props => {
 
   const shortUrl = getShortUrl(props)
   const tocId = getPageTocId(cccStore, shortUrl)
+
+  useScrollToTopOnPathChange(tocId)
   if (!tocId) {
     return null
   }
@@ -126,11 +129,8 @@ const getShortUrl = (props: PageProps): string => {
   return stripUrlShortLink(fullUrl)
 }
 
-const getPageTocId = (
-  cccStore: CCCEnhancedStore,
-  shortUrl: string
-): string | undefined => {
-  return cccStore.extraMeta.urlMap[shortUrl]
+const getPageTocId = (cccStore: CCCEnhancedStore, shortUrl: string): string => {
+  return cccStore.extraMeta.urlMap[shortUrl] || ''
 }
 const getPageNode = (cccStore: CCCEnhancedStore, tocId: string): PageNode => {
   return cccStore.store.page_nodes[tocId]
