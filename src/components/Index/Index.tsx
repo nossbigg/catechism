@@ -5,6 +5,7 @@ import { PageMetaMap } from 'cccMetaGenerator/makePageMetaMap'
 import { Layout } from '../Layout/Layout'
 import { makeStyles } from '@material-ui/core'
 import { AppRouteType } from 'components/App'
+import { useScrollToTopOnPathChange } from 'components/common/hooks/useScrollToTopOnRouteChange'
 
 const useStyles = makeStyles({
   ul: {
@@ -25,6 +26,7 @@ interface IndexProps extends AppRouteType {}
 export const Index: React.FC<IndexProps> = props => {
   const { cccStore } = props
   const styles = useStyles()
+  useScrollToTopOnPathChange('')
 
   const { store, extraMeta } = cccStore
   const { toc_link_tree, toc_nodes } = store
