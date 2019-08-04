@@ -59,7 +59,7 @@ export type PageParagraphElementType =
 interface PageParagraphBaseElement {
   type: PageParagraphElementType
 }
-interface TextElement extends PageParagraphBaseElement {
+export interface TextElement extends PageParagraphBaseElement {
   type: 'text'
   text: string
   attrs: PageElementAttributes

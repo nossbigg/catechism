@@ -6,6 +6,7 @@ import {
   PageParagraph,
   PageParagraphElement,
   PageNode,
+  TextElement,
 } from 'store/cccTypedefs'
 import { Layout } from 'components/Layout/Layout'
 import { Box, IconButton } from '@material-ui/core'
@@ -75,17 +76,41 @@ const renderParagraphElement = (
       return <sup key={index}>{element.number}</sup>
     case 'ref-anchor':
       return (
-        <a key={index} href={element.link}>
-          ⇒
-        </a>
+        <WithElementStyles element={element} key={index}>
+          <a href={element.link}>⇒</a>
+        </WithElementStyles>
       )
     case 'ref-ccc':
       return element.ref_number + ' '
     case 'text':
-      return element.text + ' '
+      return (
+        <WithElementStyles element={element} key={index}>
+          {element.text}
+        </WithElementStyles>
+      )
     default:
       return ''
   }
+}
+
+interface WithElementStylesProps {
+  element: PageParagraphElement
+}
+const WithElementStyles: React.FC<WithElementStylesProps> = props => {
+  const styles = useStyles()
+  const element = props.element as TextElement
+  const { attrs = {} } = element
+
+  return (
+    <span
+      className={classnames(styles.elementTextDefaults, {
+        [styles.elementTextBold]: attrs.b,
+        [styles.elementTextItalicised]: attrs.i,
+      })}
+    >
+      {props.children}
+    </span>
+  )
 }
 
 const renderPageControls = (
@@ -155,5 +180,14 @@ const useStyles = makeStyles({
   },
   paragraphIndented: {
     margin: '0 5vh',
+  },
+  elementTextDefaults: {
+    display: 'inline',
+  },
+  elementTextBold: {
+    fontWeight: 'bold',
+  },
+  elementTextItalicised: {
+    fontStyle: 'italic',
   },
 })
