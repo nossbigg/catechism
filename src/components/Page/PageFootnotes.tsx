@@ -72,8 +72,8 @@ const useStyles = makeStyles({
     border: '1px solid gray',
   },
   footnoteRefStyle: {
-    borderLeft: '5px solid #247300',
-    marginLeft: -15,
+    borderLeft: '3px solid #247300',
+    marginLeft: -13,
     paddingLeft: 10,
   },
 })

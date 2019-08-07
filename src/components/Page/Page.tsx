@@ -41,7 +41,7 @@ export const Page: React.FC<PageProps> = props => {
   return (
     <Layout routeHistory={props.history}>
       <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
-      <div>
+      <div className={styles.pageContainer}>
         {paragraphs.map((paragraph, index) => {
           const isEmptyParagraph = emptyTrailingParagraphIndexes.has(index)
           if (isEmptyParagraph) {
@@ -50,8 +50,8 @@ export const Page: React.FC<PageProps> = props => {
 
           return <PageParagraph paragraph={paragraph} key={index} />
         })}
+        <PageFootnotes footnotes={footnotes} />
       </div>
-      <PageFootnotes footnotes={footnotes} />
       {renderPageControls(styles, tocId, cccStore, props.history)}
     </Layout>
   )
@@ -118,6 +118,9 @@ const getTrailingEmptyParagraphIndexes = (
 }
 
 const useStyles = makeStyles({
+  pageContainer: {
+    padding: '0 10px',
+  },
   pageControls: { display: 'flex' },
   pageLeftButton: {},
   pageRightButton: { marginLeft: 'auto' },

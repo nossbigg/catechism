@@ -17,7 +17,11 @@ export const PageParagraph: React.FC<PageParagraphProps> = props => {
   const { paragraph } = props
   const { elements, attrs } = paragraph
   return (
-    <p className={classnames({ [styles.paragraphIndented]: !!attrs.indent })}>
+    <p
+      className={classnames(styles.paragraph, {
+        [styles.paragraphIndented]: !!attrs.indent,
+      })}
+    >
       {elements.map(renderParagraphElement(styles))}
     </p>
   )
@@ -74,12 +78,17 @@ const WithElementStyles: React.FC<WithElementStylesProps> = props => {
 }
 
 const useStyles = makeStyles({
+  paragraph: {
+    lineHeight: '1.5em',
+    margin: 0,
+    marginTop: '1em',
+  },
   paragraphIndented: {
     margin: '0 5vh',
   },
   cccReferenceStyle: {
-    borderLeft: '5px solid #b5b129',
-    marginLeft: -15,
+    borderLeft: '3px solid #b5b129',
+    marginLeft: -13,
     paddingLeft: 10,
   },
   elementTextDefaults: {
