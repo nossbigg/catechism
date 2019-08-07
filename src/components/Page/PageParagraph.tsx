@@ -1,26 +1,29 @@
 import React from 'react'
 import {
-  PageParagraph,
+  PageParagraph as PageParagraphType,
   PageParagraphElement,
   TextElement,
 } from '../../store/cccTypedefs'
 import classnames from 'classnames'
 import { makeStyles } from '@material-ui/styles'
 
-export const renderParagraph = (styles: Record<string, string>) =>
-  function renderParagraph(paragraph: PageParagraph, index: number) {
-    const { elements, attrs } = paragraph
-    return (
-      <p
-        key={index}
-        className={classnames({ [styles.paragraphIndented]: !!attrs.indent })}
-      >
-        {elements.map(renderParagraphElement)}
-      </p>
-    )
-  }
+interface PageParagraphProps {
+  paragraph: PageParagraphType
+}
 
-const renderParagraphElement = (
+export const PageParagraph: React.FC<PageParagraphProps> = props => {
+  const styles = useStyles()
+
+  const { paragraph } = props
+  const { elements, attrs } = paragraph
+  return (
+    <p className={classnames({ [styles.paragraphIndented]: !!attrs.indent })}>
+      {elements.map(renderParagraphElement(styles))}
+    </p>
+  )
+}
+
+const renderParagraphElement = (styles: Record<string, string>) => (
   element: PageParagraphElement,
   index: number
 ) => {
@@ -36,7 +39,9 @@ const renderParagraphElement = (
         </WithElementStyles>
       )
     case 'ref-ccc':
-      return element.ref_number + ' '
+      return (
+        <span className={styles.cccReferenceStyle}>{element.ref_number} </span>
+      )
     case 'text':
       return (
         <WithElementStyles element={element} key={index}>
@@ -69,6 +74,14 @@ const WithElementStyles: React.FC<WithElementStylesProps> = props => {
 }
 
 const useStyles = makeStyles({
+  paragraphIndented: {
+    margin: '0 5vh',
+  },
+  cccReferenceStyle: {
+    borderLeft: '5px solid #b5b129',
+    marginLeft: -15,
+    paddingLeft: 10,
+  },
   elementTextDefaults: {
     display: 'inline',
   },

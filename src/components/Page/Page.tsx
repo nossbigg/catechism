@@ -7,8 +7,8 @@ import { makeStyles } from '@material-ui/styles'
 import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
 import { AppRouteType } from 'components/App'
 import { useScrollToTopOnPathChange } from '../common/hooks/useScrollToTopOnRouteChange'
-import { renderParagraph } from './renderParagraph'
-import { renderFootnotes } from './renderPageFootnotes'
+import { PageParagraph } from './PageParagraph'
+import { PageFootnotes } from './PageFootnotes'
 import { renderPageControls } from './renderPageControls'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
@@ -38,8 +38,12 @@ export const Page: React.FC<PageProps> = props => {
   return (
     <Layout routeHistory={props.history}>
       <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
-      <div>{paragraphs.map(renderParagraph(styles))}</div>
-      {renderFootnotes(footnotes)}
+      <div>
+        {paragraphs.map((paragraph, index) => (
+          <PageParagraph paragraph={paragraph} key={index} />
+        ))}
+      </div>
+      <PageFootnotes footnotes={footnotes} />
       {renderPageControls(styles, tocId, cccStore, props.history)}
     </Layout>
   )
@@ -67,8 +71,5 @@ const useStyles = makeStyles({
   pageRightButton: { marginLeft: 'auto' },
   pageControlButton: {
     border: '1px solid gray',
-  },
-  paragraphIndented: {
-    margin: '0 5vh',
   },
 })
