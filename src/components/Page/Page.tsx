@@ -7,6 +7,9 @@ import {
   PageParagraphElement,
   PageNode,
   TextElement,
+  PageFootnotes,
+  PageFootnote,
+  PageFootnoteRef,
 } from 'store/cccTypedefs'
 import { Layout } from 'components/Layout/Layout'
 import { Box, IconButton } from '@material-ui/core'
@@ -41,12 +44,13 @@ export const Page: React.FC<PageProps> = props => {
   }
 
   const pageNode = getPageNode(cccStore, tocId)
-  const { paragraphs } = pageNode
+  const { paragraphs, footnotes } = pageNode
 
   return (
     <Layout routeHistory={props.history}>
       <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
-      {paragraphs.map(renderParagraph(styles))}
+      <div>{paragraphs.map(renderParagraph(styles))}</div>
+      {renderFootnotes(footnotes)}
       {renderPageControls(styles, tocId, cccStore, props.history)}
     </Layout>
   )
@@ -149,6 +153,43 @@ const renderPageControls = (
       )}
     </Box>
   )
+}
+
+const renderFootnotes = (footnotes: PageFootnotes) => {
+  // TODO sort ascending
+  const footnoteKeys = Object.keys(footnotes)
+
+  const hasFootnotes = footnoteKeys.length > 0
+  if (!hasFootnotes) {
+    return null
+  }
+
+  return (
+    <div>{footnoteKeys.map(key => footnotes[key]).map(renderFootnote)}</div>
+  )
+}
+
+const renderFootnote = (footnote: PageFootnote) => {
+  const { refs, number } = footnote
+  return (
+    <p>
+      {refs.reduce(renderFootnoteRefs, [<span key={-1}>{`${number}. `}</span>])}
+    </p>
+  )
+}
+
+const renderFootnoteRefs = (
+  acc: JSX.Element[],
+  curr: PageFootnoteRef,
+  index: number
+) => {
+  const shouldAddComma = index > 0
+  const renderedRef = <span key={index}>{curr.text}</span>
+
+  if (shouldAddComma) {
+    return [...acc, <>,</>, renderedRef]
+  }
+  return [...acc, renderedRef]
 }
 
 const hasUrl = (tocId: string, pageMetaMap: PageMetaMap) => tocId in pageMetaMap

@@ -27,7 +27,7 @@ export const createPageNode = (
   return {
     id,
     paragraphs,
-    footnotes: [],
+    footnotes: {},
   }
 }
 

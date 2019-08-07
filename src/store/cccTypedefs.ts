@@ -81,14 +81,14 @@ export interface SpacerElement extends PageParagraphBaseElement {
   type: 'spacer'
 }
 
-interface PageFootnotes {
-  [footnote_number: number]: PageFootnote
+export interface PageFootnotes {
+  [footnote_number: string]: PageFootnote
 }
-interface PageFootnote {
+export interface PageFootnote {
   number: number
   refs: PageFootnoteRef[]
 }
-interface PageFootnoteRef {
+export interface PageFootnoteRef {
   text: string
   link: string
 }
