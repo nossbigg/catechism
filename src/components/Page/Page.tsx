@@ -1,7 +1,7 @@
 import React from 'react'
 import { stripUrlShortLink } from 'cccMetaGenerator/makeUrlMap'
 import { CCCEnhancedStore } from 'store/cccImporter'
-import { PageNode } from 'store/cccTypedefs'
+import { PageNode, PageParagraph as PageParagraphType } from 'store/cccTypedefs'
 import { Layout } from 'components/Layout/Layout'
 import { makeStyles } from '@material-ui/styles'
 import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
@@ -34,14 +34,22 @@ export const Page: React.FC<PageProps> = props => {
 
   const pageNode = getPageNode(cccStore, tocId)
   const { paragraphs, footnotes } = pageNode
+  const emptyTrailingParagraphIndexes = getTrailingEmptyParagraphIndexes(
+    paragraphs
+  )
 
   return (
     <Layout routeHistory={props.history}>
       <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
       <div>
-        {paragraphs.map((paragraph, index) => (
-          <PageParagraph paragraph={paragraph} key={index} />
-        ))}
+        {paragraphs.map((paragraph, index) => {
+          const isEmptyParagraph = emptyTrailingParagraphIndexes.has(index)
+          if (isEmptyParagraph) {
+            return null
+          }
+
+          return <PageParagraph paragraph={paragraph} key={index} />
+        })}
       </div>
       <PageFootnotes footnotes={footnotes} />
       {renderPageControls(styles, tocId, cccStore, props.history)}
@@ -63,6 +71,50 @@ const getPageTocId = (cccStore: CCCEnhancedStore, shortUrl: string): string => {
 }
 const getPageNode = (cccStore: CCCEnhancedStore, tocId: string): PageNode => {
   return cccStore.store.page_nodes[tocId]
+}
+
+const isEmptyParagraph = (paragraph: PageParagraphType): boolean => {
+  const { elements } = paragraph
+  if (elements.length === 0) {
+    return true
+  }
+
+  if (elements.length === 1) {
+    const [firstElement] = elements
+    if (firstElement.type === 'spacer') {
+      return true
+    }
+  }
+
+  return false
+}
+
+interface TrailingEmptyParagraphAccumulator {
+  ignoreRest: boolean
+  indexes: number[]
+}
+
+const getTrailingEmptyParagraphIndexes = (
+  paragraphs: PageParagraphType[]
+): Set<number> => {
+  const emptyParagraphIndexes = paragraphs.reduceRight<
+    TrailingEmptyParagraphAccumulator
+  >(
+    (acc, paragraph, index) => {
+      if (acc.ignoreRest) {
+        return acc
+      }
+
+      if (isEmptyParagraph(paragraph)) {
+        return { ...acc, indexes: [...acc.indexes, index] }
+      }
+
+      return { ...acc, ignoreRest: true }
+    },
+    { ignoreRest: false, indexes: [] }
+  )
+
+  return new Set(emptyParagraphIndexes.indexes)
 }
 
 const useStyles = makeStyles({
