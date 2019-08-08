@@ -1,17 +1,21 @@
 import React from 'react'
 import { PageMetaMap } from '../../cccMetaGenerator/makePageMetaMap'
 import { CCCEnhancedStore } from '../../store/cccImporter'
-import { Box, IconButton } from '@material-ui/core'
+import { Box, IconButton, makeStyles } from '@material-ui/core'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 import { historyPush } from '../../utils/reactRouterUtils'
 import * as H from 'history'
 
-export const renderPageControls = (
-  styles: Record<string, string>,
-  tocId: string,
-  cccStore: CCCEnhancedStore,
+interface PageControlsProps {
+  tocId: string
+  cccStore: CCCEnhancedStore
   history: H.History
-) => {
+}
+
+export const PageControls: React.FC<PageControlsProps> = props => {
+  const styles = useStyles()
+  const { cccStore, history, tocId } = props
+
   const { pageMetaMap } = cccStore.extraMeta
   const { next, prev } = pageMetaMap[tocId]
 
@@ -47,3 +51,12 @@ export const renderPageControls = (
 const hasUrl = (tocId: string, pageMetaMap: PageMetaMap) => tocId in pageMetaMap
 const getUrl = (tocId: string, pageMetaMap: PageMetaMap) =>
   pageMetaMap[tocId].url
+
+const useStyles = makeStyles({
+  pageControls: { display: 'flex', marginTop: '1em' },
+  pageLeftButton: {},
+  pageRightButton: { marginLeft: 'auto' },
+  pageControlButton: {
+    border: '1px solid rgba(0, 0, 0, 0.08)',
+  },
+})

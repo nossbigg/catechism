@@ -9,7 +9,7 @@ import { AppRouteType } from 'components/App'
 import { useScrollToTopOnPathChange } from '../common/hooks/useScrollToTopOnRouteChange'
 import { PageParagraph } from './PageParagraph'
 import { PageFootnotes } from './PageFootnotes'
-import { renderPageControls } from './renderPageControls'
+import { PageControls } from './renderPageControls'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -52,7 +52,7 @@ export const Page: React.FC<PageProps> = props => {
         })}
         <PageFootnotes footnotes={footnotes} />
       </div>
-      {renderPageControls(styles, tocId, cccStore, props.history)}
+      <PageControls cccStore={cccStore} history={props.history} tocId={tocId} />
     </Layout>
   )
 }
@@ -120,11 +120,5 @@ const getTrailingEmptyParagraphIndexes = (
 const useStyles = makeStyles({
   pageContainer: {
     padding: '0 10px',
-  },
-  pageControls: { display: 'flex' },
-  pageLeftButton: {},
-  pageRightButton: { marginLeft: 'auto' },
-  pageControlButton: {
-    border: '1px solid gray',
   },
 })
