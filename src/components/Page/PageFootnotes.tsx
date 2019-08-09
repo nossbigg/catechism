@@ -24,6 +24,7 @@ export const PageFootnotes: React.FC<PageFoonotesProps> = props => {
 
   return (
     <div className={styles.pageFootnotesContainer}>
+      <h2 className={styles.pageFootnoteLabel}>Footnotes</h2>
       {footnoteKeys
         .map(key => footnotes[key])
         .map((footnote, index) => (
@@ -44,7 +45,11 @@ const PageFootnote: React.FC<PageFootnoteProps> = props => {
     <span key={-1} className={styles.footnoteRefStyle}>{`${number}. `}</span>
   )
 
-  return <p>{refs.reduce(renderFootnoteRefs, [footnoteNumberElement])}</p>
+  return (
+    <p className={styles.pageFootnote}>
+      {refs.reduce(renderFootnoteRefs, [footnoteNumberElement])}
+    </p>
+  )
 }
 
 const renderFootnoteRefs = (
@@ -63,13 +68,15 @@ const renderFootnoteRefs = (
 
 const useStyles = makeStyles({
   pageFootnotesContainer: {
+    marginTop: '2em',
+  },
+  pageFootnote: {
     fontSize: '0.75em',
   },
-  pageControls: { display: 'flex' },
-  pageLeftButton: {},
-  pageRightButton: { marginLeft: 'auto' },
-  pageControlButton: {
-    border: '1px solid gray',
+  pageFootnoteLabel: {
+    margin: 0,
+    fontWeight: 'normal',
+    color: 'gray',
   },
   footnoteRefStyle: {
     borderLeft: '3px solid #247300',
