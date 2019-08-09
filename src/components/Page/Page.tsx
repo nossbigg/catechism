@@ -9,7 +9,7 @@ import { AppRouteType } from 'components/App'
 import { useScrollToTopOnPathChange } from '../common/hooks/useScrollToTopOnRouteChange'
 import { PageParagraph } from './PageParagraph'
 import { PageFootnotes } from './PageFootnotes'
-import { PageControls } from './renderPageControls'
+import { PageControls } from './PageControls'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
