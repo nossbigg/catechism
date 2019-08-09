@@ -84,7 +84,8 @@ const useStyles = makeStyles({
     marginTop: '1em',
   },
   paragraphIndented: {
-    margin: '0 5vh',
+    marginLeft: '2em',
+    marginRight: '2em',
   },
   cccReferenceStyle: {
     borderLeft: '3px solid #b5b129',
