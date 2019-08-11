@@ -8,6 +8,11 @@ import { AppRouteType } from 'components/App'
 import { useScrollToTopOnPathChange } from 'components/common/hooks/useScrollToTopOnRouteChange'
 
 const useStyles = makeStyles({
+  container: {
+    // unexplained gap between toolbar and this page's outermost div
+    marginTop: -20,
+    padding: '20px 0',
+  },
   ul: {
     paddingLeft: 20,
     lineHeight: 1.5,
@@ -34,7 +39,9 @@ export const Index: React.FC<IndexProps> = props => {
 
   return (
     <Layout routeHistory={props.history}>
-      {renderIndex(toc_link_tree, toc_nodes, pageMetaMap, styles)}
+      <div className={styles.container}>
+        {renderIndex(toc_link_tree, toc_nodes, pageMetaMap, styles)}
+      </div>
     </Layout>
   )
 }

@@ -14,9 +14,11 @@ import {
 } from '@material-ui/core'
 import { Menu } from '@material-ui/icons'
 import { APP_ROUTES } from 'components/App'
+import { Footer } from 'components/Footer/Footer'
 import * as H from 'history'
 
 const useStyles = makeStyles({
+  backgroundStyle: { backgroundColor: 'white' },
   list: {
     fontFamily: 'Cinzel',
     width: 250,
@@ -95,9 +97,14 @@ export const Layout: React.FC<LayoutProps> = props => {
           </List>
         </Box>
       </Drawer>
-      <Container maxWidth={mainContainerWidth || DEFAULT_MAIN_CONTAINER_WIDTH}>
-        {props.children}
-      </Container>
+      <div className={styles.backgroundStyle}>
+        <Container
+          maxWidth={mainContainerWidth || DEFAULT_MAIN_CONTAINER_WIDTH}
+        >
+          {props.children}
+        </Container>
+      </div>
+      <Footer />
     </div>
   )
 }
@@ -112,7 +119,14 @@ const HideOnScroll: React.FC = props => {
   )
 }
 
-const DummyToolbar: React.FC = () => <Toolbar />
+const DummyToolbar: React.FC = () => {
+  const styles = useStyles()
+  return (
+    <div className={styles.backgroundStyle}>
+      <Toolbar />
+    </div>
+  )
+}
 
 const DEFAULT_MAIN_CONTAINER_WIDTH = 'md'
 const DEFAULT_TOOLBAR_WIDTH = 'md'

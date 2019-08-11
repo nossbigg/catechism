@@ -53,7 +53,7 @@ const getUrl = (tocId: string, pageMetaMap: PageMetaMap) =>
   pageMetaMap[tocId].url
 
 const useStyles = makeStyles({
-  pageControls: { display: 'flex', marginTop: '2em', marginBottom: '1em' },
+  pageControls: { display: 'flex', paddingTop: '2em', paddingBottom: '1em' },
   pageLeftButton: {},
   pageRightButton: { marginLeft: 'auto' },
   pageControlButton: {
