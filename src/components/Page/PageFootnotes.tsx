@@ -87,6 +87,8 @@ const useStyles = makeStyles({
   },
   pageFootnote: {
     fontSize: '0.75em',
+    padding: 5,
+    margin: '5px 0',
   },
   pageFootnoteLabel: {
     margin: 0,

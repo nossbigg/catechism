@@ -11,7 +11,7 @@ import { APP_ROUTES } from 'components/App'
 const useStyles = makeStyles({
   container: {
     padding: '20px 10px',
-    paddingBottom: 0,
+    paddingBottom: 10,
   },
   breadcrumbs: {
     fontFamily: 'inherit',

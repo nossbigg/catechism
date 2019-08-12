@@ -89,6 +89,7 @@ const useStyles = makeStyles({
     lineHeight: '1.5em',
     margin: 0,
     marginTop: '1em',
+    padding: '0 5px',
   },
   paragraphIndented: {
     marginLeft: '2em',
