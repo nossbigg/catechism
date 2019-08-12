@@ -10,7 +10,7 @@ import { useScrollToTopOnPathChange } from '../common/hooks/useScrollToTopOnRout
 import { PageParagraph } from './PageParagraph'
 import { PageFootnotes } from './PageFootnotes'
 import { PageControls } from './PageControls'
-import { useElementRefsState } from './scrollHooks'
+import { useElementRefsState, getParagraphRefKey } from './scrollHooks'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -51,7 +51,15 @@ export const Page: React.FC<PageProps> = props => {
             return null
           }
 
-          return <PageParagraph paragraph={paragraph} key={index} />
+          const wrapperRefMeta = elementRefs[getParagraphRefKey(index)]
+
+          return (
+            <PageParagraph
+              paragraph={paragraph}
+              key={index}
+              wrapperRefMeta={wrapperRefMeta}
+            />
+          )
         })}
         <PageFootnotes footnotes={footnotes} wrapperRefMetas={elementRefs} />
       </div>

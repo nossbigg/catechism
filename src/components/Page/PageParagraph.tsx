@@ -6,24 +6,29 @@ import {
 } from '../../store/cccTypedefs'
 import classnames from 'classnames'
 import { makeStyles } from '@material-ui/styles'
+import { WrapperRefMeta } from './scrollHooks'
+import { HighlightWrapper } from 'components/HighlightWrapper/HighlightWrapper'
 
 interface PageParagraphProps {
   paragraph: PageParagraphType
+  wrapperRefMeta: WrapperRefMeta
 }
 
 export const PageParagraph: React.FC<PageParagraphProps> = props => {
   const styles = useStyles()
 
-  const { paragraph } = props
+  const { paragraph, wrapperRefMeta } = props
   const { elements, attrs } = paragraph
   return (
-    <p
-      className={classnames(styles.paragraph, {
-        [styles.paragraphIndented]: !!attrs.indent,
-      })}
-    >
-      {elements.map(renderParagraphElement(styles))}
-    </p>
+    <HighlightWrapper refMeta={wrapperRefMeta}>
+      <p
+        className={classnames(styles.paragraph, {
+          [styles.paragraphIndented]: !!attrs.indent,
+        })}
+      >
+        {elements.map(renderParagraphElement(styles))}
+      </p>
+    </HighlightWrapper>
   )
 }
 

@@ -1,4 +1,4 @@
-import { createRef, useState, useLayoutEffect } from 'react'
+import { createRef, useState, useEffect } from 'react'
 import { PageNode } from 'store/cccTypedefs'
 import queryString from 'query-string'
 
@@ -28,7 +28,7 @@ export const useElementRefsState = (
     createItemRefs([...paragraphKeys, ...footnoteKeys], currentFocusedElement)
   )
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (currentFocusedElement === '') {
       return
     }
@@ -70,7 +70,7 @@ const resetElementRefs = (
   return { ...elementRefs, [keyToReset]: updatedElementRef }
 }
 
-export const getParagraphRefKey = (index: number) => `paragraph-${index}`
+export const getParagraphRefKey = (index: number) => `paragraph-${index + 1}`
 
 export const getFootnoteRefKey = (footnoteNumber: string) =>
   `footnote-${footnoteNumber}`
@@ -84,7 +84,7 @@ const getCurrentFocusedElement = (locationSearch: string): string => {
 
 const scrollToElement = (elementMeta: WrapperRefMeta) => {
   const current = elementMeta.ref.current as HTMLDivElement
-  setImmediate(() => {
-    window.scrollTo(0, current.offsetTop)
-  })
+  window.scrollTo(0, current.offsetTop - SCROLL_TO_ELEMENT_OFFSET)
 }
+
+const SCROLL_TO_ELEMENT_OFFSET = 100
