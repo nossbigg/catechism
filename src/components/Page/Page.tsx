@@ -10,6 +10,7 @@ import { useScrollToTopOnPathChange } from '../common/hooks/useScrollToTopOnRout
 import { PageParagraph } from './PageParagraph'
 import { PageFootnotes } from './PageFootnotes'
 import { PageControls } from './PageControls'
+import { useElementRefsState } from './scrollHooks'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -21,18 +22,20 @@ interface PageRouteParams {
 interface PageProps extends AppRouteType<PageRouteParams> {}
 
 export const Page: React.FC<PageProps> = props => {
-  const { cccStore } = props
+  const { cccStore, location } = props
   const styles = useStyles()
 
   const shortUrl = getShortUrl(props)
   const tocId = getPageTocId(cccStore, shortUrl)
 
   useScrollToTopOnPathChange(tocId)
-  if (!tocId) {
+  const pageNode = getPageNode(cccStore, tocId)
+  const elementRefs = useElementRefsState(pageNode, location.search)
+
+  if (!pageNode) {
     return null
   }
 
-  const pageNode = getPageNode(cccStore, tocId)
   const { paragraphs, footnotes } = pageNode
   const emptyTrailingParagraphIndexes = getTrailingEmptyParagraphIndexes(
     paragraphs
@@ -50,7 +53,7 @@ export const Page: React.FC<PageProps> = props => {
 
           return <PageParagraph paragraph={paragraph} key={index} />
         })}
-        <PageFootnotes footnotes={footnotes} />
+        <PageFootnotes footnotes={footnotes} wrapperRefMetas={elementRefs} />
       </div>
       <PageControls cccStore={cccStore} history={props.history} tocId={tocId} />
     </Layout>
@@ -69,7 +72,10 @@ const getShortUrl = (props: PageProps): string => {
 const getPageTocId = (cccStore: CCCEnhancedStore, shortUrl: string): string => {
   return cccStore.extraMeta.urlMap[shortUrl] || ''
 }
-const getPageNode = (cccStore: CCCEnhancedStore, tocId: string): PageNode => {
+const getPageNode = (
+  cccStore: CCCEnhancedStore,
+  tocId: string
+): PageNode | undefined => {
   return cccStore.store.page_nodes[tocId]
 }
 

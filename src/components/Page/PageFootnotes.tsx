@@ -5,13 +5,16 @@ import {
   PageFootnoteRef,
 } from '../../store/cccTypedefs'
 import { makeStyles } from '@material-ui/styles'
+import { RefsMap, WrapperRefMeta, getFootnoteRefKey } from './scrollHooks'
+import { HighlightWrapper } from 'components/HighlightWrapper/HighlightWrapper'
 
 interface PageFoonotesProps {
   footnotes: PageFootnotesType
+  wrapperRefMetas: RefsMap
 }
 
 export const PageFootnotes: React.FC<PageFoonotesProps> = props => {
-  const { footnotes } = props
+  const { footnotes, wrapperRefMetas } = props
   const styles = useStyles()
 
   // TODO sort ascending
@@ -25,30 +28,41 @@ export const PageFootnotes: React.FC<PageFoonotesProps> = props => {
   return (
     <div className={styles.pageFootnotesContainer}>
       <h2 className={styles.pageFootnoteLabel}>Footnotes</h2>
-      {footnoteKeys
-        .map(key => footnotes[key])
-        .map((footnote, index) => (
-          <PageFootnote footnote={footnote} key={index} />
-        ))}
+      {footnoteKeys.map((key, index) => {
+        const footnote = footnotes[key]
+        const wrapperRefMeta = wrapperRefMetas[getFootnoteRefKey(key)]
+
+        return (
+          <PageFootnote
+            footnote={footnote}
+            wrapperRefMeta={wrapperRefMeta}
+            key={index}
+          />
+        )
+      })}
     </div>
   )
 }
 
 interface PageFootnoteProps {
   footnote: PageFootnoteType
+  wrapperRefMeta: WrapperRefMeta
 }
 const PageFootnote: React.FC<PageFootnoteProps> = props => {
   const styles = useStyles()
-  const { refs, number } = props.footnote
+  const { footnote, wrapperRefMeta } = props
+  const { refs, number } = footnote
 
   const footnoteNumberElement = (
     <span key={-1} className={styles.footnoteRefStyle}>{`${number}. `}</span>
   )
 
   return (
-    <p className={styles.pageFootnote}>
-      {refs.reduce(renderFootnoteRefs, [footnoteNumberElement])}
-    </p>
+    <HighlightWrapper refMeta={wrapperRefMeta}>
+      <p className={styles.pageFootnote}>
+        {refs.reduce(renderFootnoteRefs, [footnoteNumberElement])}
+      </p>
+    </HighlightWrapper>
   )
 }
 
