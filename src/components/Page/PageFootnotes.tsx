@@ -75,7 +75,8 @@ const renderFootnoteRefs = (
   const renderedRef = <span key={index}>{curr.text}</span>
 
   if (shouldAddComma) {
-    return [...acc, <>,</>, renderedRef]
+    const commaElement = <span key={`${index}-comma`}>,</span>
+    return [...acc, commaElement, renderedRef]
   }
   return [...acc, renderedRef]
 }

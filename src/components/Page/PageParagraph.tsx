@@ -44,7 +44,9 @@ const renderParagraphElement = (styles: Record<string, string>) => (
       )
     case 'ref-ccc':
       return (
-        <span className={styles.cccReferenceStyle}>{element.ref_number} </span>
+        <span key={index} className={styles.cccReferenceStyle}>
+          {element.ref_number}{' '}
+        </span>
       )
     case 'text':
       return (
