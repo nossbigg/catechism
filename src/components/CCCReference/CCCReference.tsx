@@ -2,6 +2,7 @@ import React from 'react'
 import { getCCCStore } from 'store/cccImporter'
 import { findPage } from 'cccMetaGenerator/makeRefRangeTree'
 import { AppRouteType } from 'components/App'
+import { getCCCRefKey } from 'components/Page/pageScrollHooks'
 
 export const CCC_REFERENCE_MATCH = 'CCC_REFERENCE_MATCH'
 
@@ -17,9 +18,10 @@ export const CCCReference: React.FC<CCCReferenceProps> = props => {
     return null
   }
 
+  const cccReferenceNumber = parseInt(cccReferenceMatch, 10)
   const cccStore = getCCCStore()
   const matchedPageId = findPage(
-    parseInt(cccReferenceMatch, 10),
+    cccReferenceNumber,
     cccStore.extraMeta.cccRefRangeTree.root
   )
 
@@ -28,7 +30,9 @@ export const CCCReference: React.FC<CCCReferenceProps> = props => {
   }
 
   const targetPageUrl = cccStore.extraMeta.pageMetaMap[matchedPageId].url
-  props.history.replace(`/p/${targetPageUrl}`)
+  props.history.replace(
+    `/p/${targetPageUrl}?focus=${getCCCRefKey(cccReferenceNumber)}`
+  )
 
   return null
 }

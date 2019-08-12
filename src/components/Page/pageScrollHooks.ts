@@ -1,4 +1,4 @@
-import { CCCRefElement } from './../../store/cccTypedefs'
+import { CCCRefElement } from '../../store/cccTypedefs'
 import { createRef, useState, useEffect } from 'react'
 import { PageNode, PageParagraph } from 'store/cccTypedefs'
 import queryString from 'query-string'
@@ -12,7 +12,7 @@ export interface WrapperRefMeta {
   highlighted: boolean
 }
 
-export const useElementRefsState = (
+export const usePageScrollHooks = (
   page: PageNode | undefined,
   locationSearch: string
 ): RefsMap => {
@@ -114,7 +114,7 @@ export const getParagraphRefKey = (index: number) => `paragraph-${index + 1}`
 export const getFootnoteRefKey = (footnoteNumber: string) =>
   `footnote-${footnoteNumber}`
 
-const getCCCRefKey = (refNumber: number) => `ccc-${refNumber}`
+export const getCCCRefKey = (refNumber: number) => `ccc-${refNumber}`
 
 const resolveFocusedElementKey = (
   cccRefToParagraphMapper: CCCRefToParagraphMapper,

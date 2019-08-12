@@ -10,7 +10,7 @@ import { useScrollToTopOnPathChange } from '../common/hooks/useScrollToTopOnRout
 import { PageParagraph } from './PageParagraph'
 import { PageFootnotes } from './PageFootnotes'
 import { PageControls } from './PageControls'
-import { useElementRefsState, getParagraphRefKey } from './scrollHooks'
+import { usePageScrollHooks, getParagraphRefKey } from './pageScrollHooks'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -30,7 +30,7 @@ export const Page: React.FC<PageProps> = props => {
 
   useScrollToTopOnPathChange(tocId)
   const pageNode = getPageNode(cccStore, tocId)
-  const elementRefs = useElementRefsState(pageNode, location.search)
+  const elementRefs = usePageScrollHooks(pageNode, location.search)
 
   if (!pageNode) {
     return null

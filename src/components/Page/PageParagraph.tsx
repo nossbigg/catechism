@@ -6,7 +6,7 @@ import {
 } from '../../store/cccTypedefs'
 import classnames from 'classnames'
 import { makeStyles } from '@material-ui/styles'
-import { WrapperRefMeta } from './scrollHooks'
+import { WrapperRefMeta } from './pageScrollHooks'
 import { HighlightWrapper } from 'components/HighlightWrapper/HighlightWrapper'
 
 interface PageParagraphProps {

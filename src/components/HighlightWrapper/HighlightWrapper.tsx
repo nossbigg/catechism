@@ -1,7 +1,7 @@
 import React, { createRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import classnames from 'classnames'
-import { WrapperRefMeta } from 'components/Page/scrollHooks'
+import { WrapperRefMeta } from 'components/Page/pageScrollHooks'
 
 interface HighlightWrapperProps {
   refMeta?: WrapperRefMeta

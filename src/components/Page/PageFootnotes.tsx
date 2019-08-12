@@ -5,7 +5,7 @@ import {
   PageFootnoteRef,
 } from '../../store/cccTypedefs'
 import { makeStyles } from '@material-ui/styles'
-import { RefsMap, WrapperRefMeta, getFootnoteRefKey } from './scrollHooks'
+import { RefsMap, WrapperRefMeta, getFootnoteRefKey } from './pageScrollHooks'
 import { HighlightWrapper } from 'components/HighlightWrapper/HighlightWrapper'
 
 interface PageFoonotesProps {
