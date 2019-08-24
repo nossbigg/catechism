@@ -64,11 +64,11 @@ export interface TextElement extends PageParagraphBaseElement {
   text: string
   attrs: PageElementAttributes
 }
-interface RefElement extends PageParagraphBaseElement {
+export interface RefElement extends PageParagraphBaseElement {
   type: 'ref'
   number: number
 }
-interface AnchorElement extends PageParagraphBaseElement {
+export interface AnchorElement extends PageParagraphBaseElement {
   type: 'ref-anchor'
   link: string
   attrs: PageElementAttributes
