@@ -25,7 +25,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --cache 'src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "build:node-runnable": "tsc --module commonjs --noemit false --outDir build_local -p tsconfig.json",
+    "build:static-assets": "yarn build:node-runnable && node build_local/makeStaticAssets/run.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,9 +51,11 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",
+    "@types/fs-extra": "^8.0.0",
     "@types/lunr": "^2.3.2",
     "@types/ramda": "^0.26.19",
     "@types/react-router-dom": "^4.3.4",
+    "@types/request-promise-native": "^1.0.16",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
     "eslint": "^5.16.0",
@@ -59,7 +63,9 @@
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react-hooks": "^1.6.0",
+    "fs-extra": "^8.1.0",
     "husky": "^2.4.1",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "request-promise-native": "^1.0.7"
   }
 }
