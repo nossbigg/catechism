@@ -5,8 +5,9 @@ import { PAGE_TOC_ID_MATCH, Page } from './Page/Page'
 import { Index } from './Index/Index'
 import { CCC_REFERENCE_MATCH, CCCReference } from './CCCReference/CCCReference'
 import { CCCEnhancedStore, getCCCStore } from 'store/cccImporter'
+import { Search } from './Search/Search'
 
-type AppRouteKeys = 'HOME' | 'PAGE' | 'INDEX' | 'CCC_REFERENCE'
+type AppRouteKeys = 'HOME' | 'PAGE' | 'INDEX' | 'CCC_REFERENCE' | 'SEARCH'
 type AppRoutes = Record<AppRouteKeys, string>
 
 export const APP_ROUTES: AppRoutes = {
@@ -14,6 +15,7 @@ export const APP_ROUTES: AppRoutes = {
   PAGE: `/p/:${PAGE_TOC_ID_MATCH}`,
   INDEX: '/index',
   CCC_REFERENCE: `/r/:${CCC_REFERENCE_MATCH}`,
+  SEARCH: `/s`,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,6 +33,7 @@ export const App: React.FC = () => {
       <Route path={APP_ROUTES.HOME} exact component={withStore(Home)}></Route>
       <Route path={APP_ROUTES.INDEX} component={withStore(Index)}></Route>
       <Route path={APP_ROUTES.PAGE} component={withStore(Page)}></Route>
+      <Route path={APP_ROUTES.SEARCH} component={withStore(Search)}></Route>
       <Route
         path={APP_ROUTES.CCC_REFERENCE}
         component={withStore(CCCReference)}
