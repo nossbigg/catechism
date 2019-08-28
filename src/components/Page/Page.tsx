@@ -1,7 +1,10 @@
 import React from 'react'
 import { stripUrlShortLink } from 'cccMetaGenerator/makeUrlMap'
-import { CCCEnhancedStore } from 'store/cccImporter'
-import { PageNode, PageParagraph as PageParagraphType } from 'store/cccTypedefs'
+import {
+  PageNode,
+  PageParagraph as PageParagraphType,
+  CCCEnhancedStore,
+} from 'store/cccTypedefs'
 import { Layout } from 'components/Layout/Layout'
 import { makeStyles } from '@material-ui/styles'
 import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'

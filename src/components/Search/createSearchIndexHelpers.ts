@@ -1,4 +1,4 @@
-import { CCCEnhancedStore } from '../../store/cccImporter'
+import { CCCEnhancedStore } from 'store/cccTypedefs'
 import {
   PageNode,
   PageParagraph,

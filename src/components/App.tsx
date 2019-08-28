@@ -4,7 +4,7 @@ import { Home } from './Home/Home'
 import { PAGE_TOC_ID_MATCH, Page } from './Page/Page'
 import { Index } from './Index/Index'
 import { CCC_REFERENCE_MATCH, CCCReference } from './CCCReference/CCCReference'
-import { CCCEnhancedStore } from 'store/cccImporter'
+import { CCCEnhancedStore } from 'store/cccTypedefs'
 import { Search } from './Search/Search'
 import request from 'request-promise-native'
 

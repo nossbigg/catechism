@@ -1,5 +1,5 @@
 import React from 'react'
-import { CCCEnhancedStore } from '../../store/cccImporter'
+import { CCCEnhancedStore } from 'store/cccTypedefs'
 import { Breadcrumbs, makeStyles, IconButton } from '@material-ui/core'
 import { BreadcrumbsMap } from 'cccMetaGenerator/makeBreadcrumbs'
 import { TOCNode, TOCNodes } from 'store/cccTypedefs'

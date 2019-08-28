@@ -1,5 +1,5 @@
 import { createPageSnapshot, CCCPageSnapshot } from './createSearchIndexHelpers'
-import { CCCEnhancedStore } from 'store/cccImporter'
+import { CCCEnhancedStore } from 'store/cccTypedefs'
 import lunr from 'lunr'
 
 export interface CCCSearchIndexes {

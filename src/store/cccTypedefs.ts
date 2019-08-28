@@ -1,3 +1,5 @@
+import { CCCMeta } from 'cccMetaGenerator/cccMetaGenerator'
+
 export interface CCCStore {
   toc_nodes: TOCNodes
   toc_link_tree: TOCLink[]
@@ -118,4 +120,9 @@ interface CCCStoreMeta {
   version: string
   created_at: string
   attribution: string[]
+}
+
+export interface CCCEnhancedStore {
+  store: CCCStore
+  extraMeta: CCCMeta
 }

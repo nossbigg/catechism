@@ -1,6 +1,6 @@
 import React from 'react'
 import { PageMetaMap } from '../../cccMetaGenerator/makePageMetaMap'
-import { CCCEnhancedStore } from '../../store/cccImporter'
+import { CCCEnhancedStore } from 'store/cccTypedefs'
 import { Box, IconButton, makeStyles } from '@material-ui/core'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 import { historyPush } from '../../utils/reactRouterUtils'
