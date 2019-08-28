@@ -27,7 +27,8 @@
     "lint": "eslint --cache 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "yarn lint --fix",
     "build:node-runnable": "tsc --module commonjs --noemit false --outDir build_local -p tsconfig.json",
-    "build:static-assets": "yarn build:node-runnable && node build_local/makeStaticAssets/run.js"
+    "build:static-assets": "yarn build:node-runnable && node build_local/makeStaticAssets/run.js",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -66,6 +67,7 @@
     "fs-extra": "^8.1.0",
     "husky": "^2.4.1",
     "prettier": "^1.18.2",
-    "request-promise-native": "^1.0.7"
+    "request-promise-native": "^1.0.7",
+    "source-map-explorer": "^2.0.1"
   }
 }
