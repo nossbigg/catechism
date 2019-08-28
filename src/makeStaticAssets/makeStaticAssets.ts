@@ -3,6 +3,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import { CCCStore } from './../store/cccTypedefs'
 import { makeCCCMeta, CCCMeta } from '../cccMetaGenerator/cccMetaGenerator'
+import { stripUrlShortLink } from '../cccMetaGenerator/makeUrlMap'
 
 export const makeStaticAssets = async () => {
   await prepareDirectory()
@@ -10,8 +11,11 @@ export const makeStaticAssets = async () => {
   const ccc = await getCCCReleaseFromRemote()
   const cccMeta = await makeCCCMetadata(ccc)
 
+  const cccPages = await makeCCCStaticPages(ccc, cccMeta)
+
   await saveCCC(ccc)
   await saveCCCMeta(cccMeta)
+  await saveCCCPages(cccPages)
 }
 
 const getCCCReleaseFromRemote = async (): Promise<CCCStore> => {
@@ -42,6 +46,23 @@ const makeCCCMetadata = async (ccc: CCCStore): Promise<CCCMeta> => {
   return meta
 }
 
+const makeCCCStaticPages = async (
+  ccc: CCCStore,
+  cccMeta: CCCMeta
+): Promise<CCCPage[]> => {
+  const { page_nodes } = ccc
+  const { urlMap } = cccMeta
+
+  return Object.keys(urlMap)
+    .map(fullUrl => {
+      const shortUrl = stripUrlShortLink(fullUrl)
+      const tocId = urlMap[fullUrl]
+      const page = page_nodes[tocId]
+      return { fileName: shortUrl, jsonContent: JSON.stringify(page) }
+    })
+    .filter(page => !!page.jsonContent)
+}
+
 const saveCCC = async (ccc: CCCStore) => {
   log('ccc: saving to disk...')
   await fs.writeFile(STATIC_ASSETS_PATHS.ccc, JSON.stringify(ccc))
@@ -54,10 +75,23 @@ const saveCCCMeta = async (cccMeta: CCCMeta) => {
   log('ccc meta: done!')
 }
 
+const saveCCCPages = async (cccPages: CCCPage[]) => {
+  log('ccc pages: saving to disk...')
+  await Promise.all(
+    cccPages.map(page => {
+      const { fileName, jsonContent } = page
+      const fullFileName = STATIC_ASSETS_PATHS.makePagePath(fileName)
+      return fs.writeFile(fullFileName, jsonContent)
+    })
+  )
+  log('ccc pages: done!')
+}
+
 const prepareDirectory = async () => {
   log('cleanup: cleaning existing assets...')
   await fs.remove(STATIC_ASSETS_PATHS.rootDir)
   await fs.mkdirp(STATIC_ASSETS_PATHS.rootDir)
+  await fs.mkdirp(STATIC_ASSETS_PATHS.cccPagesDir)
   log('cleanup: done!')
 }
 
@@ -69,6 +103,9 @@ const STATIC_ASSETS_PATHS = {
   rootDir: STATIC_ASSETS_ROOT,
   ccc: path.join(STATIC_ASSETS_ROOT, 'ccc.json'),
   cccMeta: path.join(STATIC_ASSETS_ROOT, 'cccMeta.json'),
+  cccPagesDir: path.join(STATIC_ASSETS_ROOT, 'pages'),
+  makePagePath: (fileName: string) =>
+    path.join(STATIC_ASSETS_ROOT, 'pages', `${fileName}.json`),
 }
 
 const GITHUB_REQUEST_PARAMETERS = {
@@ -77,6 +114,11 @@ const GITHUB_REQUEST_PARAMETERS = {
   headers: {
     'User-Agent': 'nossbigg/catechism-web',
   },
+}
+
+interface CCCPage {
+  fileName: string
+  jsonContent: string
 }
 
 interface GithubAPIReleaseResponse {
