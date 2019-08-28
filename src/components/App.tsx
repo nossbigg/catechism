@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { HashRouter, Route, RouteComponentProps } from 'react-router-dom'
 import { Home } from './Home/Home'
 import { PAGE_TOC_ID_MATCH, Page } from './Page/Page'
 import { Index } from './Index/Index'
 import { CCC_REFERENCE_MATCH, CCCReference } from './CCCReference/CCCReference'
-import { CCCEnhancedStore, getCCCStore } from 'store/cccImporter'
+import { CCCEnhancedStore } from 'store/cccImporter'
 import { Search } from './Search/Search'
+import request from 'request-promise-native'
 
 type AppRouteKeys = 'HOME' | 'PAGE' | 'INDEX' | 'CCC_REFERENCE' | 'SEARCH'
 type AppRoutes = Record<AppRouteKeys, string>
@@ -25,8 +26,12 @@ export interface AppRouteType<TRouteParams = any>
 }
 
 export const App: React.FC = () => {
-  const cccStore = getCCCStore()
-  const withStore = withStoreEnhancer(cccStore)
+  const { isLoaded, store: cccStore } = useCCCStoreHook()
+  const withStore = withStoreEnhancer(cccStore as CCCEnhancedStore)
+
+  if (!isLoaded) {
+    return null
+  }
 
   return (
     <HashRouter>
@@ -48,3 +53,29 @@ const withStoreEnhancer = (store: CCCEnhancedStore) => (
   function withStoreEnhancer(props: RouteComponentProps) {
     return <Component {...props} cccStore={store} />
   }
+
+const useCCCStoreHook = () => {
+  const PUBLIC_FOLDER_URL = window.location.origin
+  const [store, setStore] = useState<CCCEnhancedStore | undefined>(undefined)
+
+  useEffect(() => {
+    if (!store) {
+      const loadStore = async () => {
+        const ccc = await request({
+          uri: `${PUBLIC_FOLDER_URL}/ccc/ccc.json`,
+          method: 'GET',
+          json: true,
+        })
+        const cccMeta = await request({
+          uri: `${PUBLIC_FOLDER_URL}/ccc/cccMeta.json`,
+          method: 'GET',
+          json: true,
+        })
+        setStore({ store: ccc, extraMeta: cccMeta })
+      }
+      setImmediate(loadStore)
+    }
+  }, [store, PUBLIC_FOLDER_URL])
+
+  return { store, isLoaded: !!store }
+}
