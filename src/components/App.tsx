@@ -55,27 +55,35 @@ const withStoreEnhancer = (store: CCCEnhancedStore) => (
   }
 
 const useCCCStoreHook = () => {
-  const PUBLIC_FOLDER_URL = window.location.origin
   const [store, setStore] = useState<CCCEnhancedStore | undefined>(undefined)
 
   useEffect(() => {
     if (!store) {
-      const loadStore = async () => {
-        const ccc = await request({
-          uri: `${PUBLIC_FOLDER_URL}/ccc/ccc.json`,
-          method: 'GET',
-          json: true,
-        })
-        const cccMeta = await request({
-          uri: `${PUBLIC_FOLDER_URL}/ccc/cccMeta.json`,
-          method: 'GET',
-          json: true,
-        })
-        setStore({ store: ccc, extraMeta: cccMeta })
-      }
-      setImmediate(loadStore)
+      setImmediate(() => loadRemoteStores(setStore))
     }
-  }, [store, PUBLIC_FOLDER_URL])
+  }, [store])
 
   return { store, isLoaded: !!store }
+}
+
+const loadRemoteStores = async (
+  setStore: (store: CCCEnhancedStore) => void
+) => {
+  const PUBLIC_FOLDER_URL = window.location.origin
+
+  const cccRequest = () =>
+    request({
+      uri: `${PUBLIC_FOLDER_URL}/ccc/ccc.json`,
+      method: 'GET',
+      json: true,
+    })
+  const cccMetaRequest = () =>
+    request({
+      uri: `${PUBLIC_FOLDER_URL}/ccc/cccMeta.json`,
+      method: 'GET',
+      json: true,
+    })
+
+  const [ccc, cccMeta] = await Promise.all([cccRequest(), cccMetaRequest()])
+  setStore({ store: ccc, extraMeta: cccMeta })
 }
