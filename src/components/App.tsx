@@ -7,6 +7,7 @@ import { CCC_REFERENCE_MATCH, CCCReference } from './CCCReference/CCCReference'
 import { CCCEnhancedStore } from 'store/cccTypedefs'
 import { Search } from './Search/Search'
 import request from 'request-promise-native'
+import { FLAG_ENABLE_SEARCH_PAGE } from 'components/common/featureFlags'
 
 type AppRouteKeys = 'HOME' | 'PAGE' | 'INDEX' | 'CCC_REFERENCE' | 'SEARCH'
 type AppRoutes = Record<AppRouteKeys, string>
@@ -38,7 +39,9 @@ export const App: React.FC = () => {
       <Route path={APP_ROUTES.HOME} exact component={withStore(Home)}></Route>
       <Route path={APP_ROUTES.INDEX} component={withStore(Index)}></Route>
       <Route path={APP_ROUTES.PAGE} component={withStore(Page)}></Route>
-      <Route path={APP_ROUTES.SEARCH} component={withStore(Search)}></Route>
+      {FLAG_ENABLE_SEARCH_PAGE && (
+        <Route path={APP_ROUTES.SEARCH} component={withStore(Search)}></Route>
+      )}
       <Route
         path={APP_ROUTES.CCC_REFERENCE}
         component={withStore(CCCReference)}
