@@ -1,6 +1,7 @@
 import request from 'request-promise-native'
 import fs from 'fs-extra'
 import path from 'path'
+import { execSync } from 'child_process'
 import { CCCStore } from './../store/cccTypedefs'
 import { makeCCCMeta, CCCMeta } from '../cccMetaGenerator/cccMetaGenerator'
 import { stripUrlShortLink } from '../cccMetaGenerator/makeUrlMap'
@@ -10,9 +11,9 @@ export const makeStaticAssets = async () => {
 
   const ccc = await getCCCReleaseFromRemote()
   const cccMeta = await makeCCCMetadata(ccc)
-
   const cccPages = await makeCCCStaticPages(ccc, cccMeta)
 
+  await saveRepoVersionFile(ccc)
   await saveCCC(ccc)
   await saveCCCMeta(cccMeta)
   await saveCCCPages(cccPages)
@@ -87,6 +88,21 @@ const saveCCCPages = async (cccPages: CCCPage[]) => {
   log('ccc pages: done!')
 }
 
+const saveRepoVersionFile = async (ccc: CCCStore): Promise<void> => {
+  log('repo version: saving to disk...')
+
+  const revision = execSync('git rev-parse --short HEAD')
+    .toString()
+    .trim()
+  const versionInfo: RepoVersion = { repo: revision, store: ccc.meta.version }
+
+  await fs.writeFile(
+    STATIC_ASSETS_PATHS.versionFile,
+    JSON.stringify(versionInfo)
+  )
+  log('repo version: done!')
+}
+
 const prepareDirectory = async () => {
   log('cleanup: cleaning existing assets...')
   await fs.remove(STATIC_ASSETS_PATHS.rootDir)
@@ -104,6 +120,7 @@ const STATIC_ASSETS_PATHS = {
   ccc: path.join(STATIC_ASSETS_ROOT, 'ccc.json'),
   cccMeta: path.join(STATIC_ASSETS_ROOT, 'cccMeta.json'),
   cccPagesDir: path.join(STATIC_ASSETS_ROOT, 'pages'),
+  versionFile: path.join(STATIC_ASSETS_ROOT, 'version.json'),
   makePagePath: (fileName: string) =>
     path.join(STATIC_ASSETS_ROOT, 'pages', `${fileName}.json`),
 }
@@ -128,4 +145,9 @@ interface GithubAPIReleaseResponse {
 interface Asset {
   name: string
   browser_download_url: string
+}
+
+interface RepoVersion {
+  repo: string
+  store: string
 }
