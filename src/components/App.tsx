@@ -72,7 +72,10 @@ const useCCCStoreHook = () => {
 const loadRemoteStores = async (
   setStore: (store: CCCEnhancedStore) => void
 ) => {
-  const PUBLIC_FOLDER_URL = window.location.origin
+  const PUBLIC_FOLDER_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://nossbigg.github.io/catechism'
+      : window.location.origin
 
   const cccRequest = () =>
     request({
