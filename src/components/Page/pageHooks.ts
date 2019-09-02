@@ -4,7 +4,7 @@ import { PUBLIC_FOLDER_URL } from 'components/common/config'
 import { PageNode } from 'store/cccTypedefs'
 
 export const useLoadPageContentHook = (shortUrl: string) => {
-  const [lastShortUrl, setShortUrl] = useState('')
+  const [lastShortUrl, setShortUrl] = useState(shortUrl)
   const [pageNode, setPageNode] = useState<PageNode | undefined>(undefined)
 
   useEffect(() => {
