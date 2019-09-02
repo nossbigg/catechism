@@ -1,6 +1,8 @@
+import { PageNodes } from './../../store/cccTypedefs'
 import { createPageSnapshot, CCCPageSnapshot } from './createSearchIndexHelpers'
 import { CCCEnhancedStore } from 'store/cccTypedefs'
 import lunr from 'lunr'
+import { createPageNodesFromRemote } from './createPageNodes'
 
 export interface CCCSearchIndexes {
   titleIndex: lunr.Index
@@ -14,7 +16,9 @@ export interface CCCSearchIndexes {
 export const createSearchIndexes = async (
   cccStore: CCCEnhancedStore
 ): Promise<CCCSearchIndexes> => {
-  const cccSnapshot = makeConciseCCCSnapshot(cccStore)
+  const pageNodes = await createPageNodesFromRemote(cccStore)
+
+  const cccSnapshot = makeConciseCCCSnapshot(cccStore, pageNodes)
   const pageSnapshots = Object.values(cccSnapshot)
 
   /* eslint-disable fp/no-this */
@@ -69,11 +73,15 @@ interface ConciseCCCSnapshot {
 }
 
 export const makeConciseCCCSnapshot = (
-  cccStore: CCCEnhancedStore
+  cccStore: CCCEnhancedStore,
+  pageNodes: PageNodes
 ): ConciseCCCSnapshot => {
   const tocKeys = Object.keys(cccStore.extraMeta.pageMetaMap)
   return tocKeys.reduce(
-    (acc, tocId) => ({ ...acc, [tocId]: createPageSnapshot(cccStore, tocId) }),
+    (acc, tocId) => ({
+      ...acc,
+      [tocId]: createPageSnapshot(tocId, cccStore, pageNodes),
+    }),
     {}
   )
 }

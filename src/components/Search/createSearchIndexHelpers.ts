@@ -1,4 +1,4 @@
-import { CCCEnhancedStore } from 'store/cccTypedefs'
+import { CCCEnhancedStore, PageNodes } from 'store/cccTypedefs'
 import {
   PageNode,
   PageParagraph,
@@ -17,14 +17,15 @@ export interface CCCPageSnapshot {
 }
 
 export const createPageSnapshot = (
+  tocId: string,
   cccStore: CCCEnhancedStore,
-  tocId: string
+  pageNodes: PageNodes
 ): CCCPageSnapshot => {
   const { store } = cccStore
-  const { page_nodes, toc_nodes } = store
+  const { toc_nodes } = store
 
   const { text: pageTitle } = toc_nodes[tocId]
-  const pageContent = extractTextFromPage(page_nodes[tocId])
+  const pageContent = extractTextFromPage(pageNodes[tocId])
 
   return { title: pageTitle, content: pageContent, id: tocId }
 }
