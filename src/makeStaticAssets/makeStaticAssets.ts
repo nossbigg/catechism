@@ -2,7 +2,7 @@ import request from 'request-promise-native'
 import fs from 'fs-extra'
 import path from 'path'
 import { execSync } from 'child_process'
-import { CCCStore } from './../store/cccTypedefs'
+import { CCCStore, CCCLeanStore } from 'store/cccTypedefs'
 import { makeCCCMeta, CCCMeta } from '../cccMetaGenerator/cccMetaGenerator'
 import { stripUrlShortLink } from '../cccMetaGenerator/makeUrlMap'
 
@@ -12,9 +12,10 @@ export const makeStaticAssets = async () => {
   const ccc = await getCCCReleaseFromRemote()
   const cccMeta = await makeCCCMetadata(ccc)
   const cccPages = await makeCCCStaticPages(ccc, cccMeta)
+  const leanCCC = makeLeanCCC(ccc)
 
   await saveRepoVersionFile(ccc)
-  await saveCCC(ccc)
+  await saveCCC(leanCCC)
   await saveCCCMeta(cccMeta)
   await saveCCCPages(cccPages)
 }
@@ -38,6 +39,11 @@ const getCCCReleaseFromRemote = async (): Promise<CCCStore> => {
 
   log('ccc: done!')
   return cccDownload
+}
+
+const makeLeanCCC = (ccc: CCCStore): CCCLeanStore => {
+  const { page_nodes, ...rest } = ccc
+  return rest
 }
 
 const makeCCCMetadata = async (ccc: CCCStore): Promise<CCCMeta> => {
@@ -64,7 +70,7 @@ const makeCCCStaticPages = async (
     .filter(page => !!page.jsonContent)
 }
 
-const saveCCC = async (ccc: CCCStore) => {
+const saveCCC = async (ccc: CCCLeanStore) => {
   log('ccc: saving to disk...')
   await fs.writeFile(STATIC_ASSETS_PATHS.ccc, JSON.stringify(ccc))
   log('ccc: done!')

@@ -8,6 +8,8 @@ export interface CCCStore {
   meta: CCCStoreMeta
 }
 
+export type CCCLeanStore = Omit<CCCStore, 'page_nodes'>
+
 export interface TOCNodes {
   [toc_node: string]: TOCNode
 }
@@ -123,6 +125,6 @@ interface CCCStoreMeta {
 }
 
 export interface CCCEnhancedStore {
-  store: CCCStore
+  store: CCCLeanStore
   extraMeta: CCCMeta
 }
