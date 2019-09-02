@@ -8,6 +8,7 @@ import { CCCEnhancedStore } from 'store/cccTypedefs'
 import { Search } from './Search/Search'
 import request from 'request-promise-native'
 import { FLAG_ENABLE_SEARCH_PAGE } from 'components/common/featureFlags'
+import { PUBLIC_FOLDER_URL } from 'components/common/config'
 
 type AppRouteKeys = 'HOME' | 'PAGE' | 'INDEX' | 'CCC_REFERENCE' | 'SEARCH'
 type AppRoutes = Record<AppRouteKeys, string>
@@ -72,11 +73,6 @@ const useCCCStoreHook = () => {
 const loadRemoteStores = async (
   setStore: (store: CCCEnhancedStore) => void
 ) => {
-  const PUBLIC_FOLDER_URL =
-    process.env.NODE_ENV === 'production'
-      ? 'https://nossbigg.github.io/catechism'
-      : window.location.origin
-
   const cccRequest = () =>
     request({
       uri: `${PUBLIC_FOLDER_URL}/ccc/ccc.json`,

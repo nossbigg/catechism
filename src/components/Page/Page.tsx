@@ -1,7 +1,6 @@
 import React from 'react'
 import { stripUrlShortLink } from 'cccMetaGenerator/makeUrlMap'
 import {
-  PageNode,
   PageParagraph as PageParagraphType,
   CCCEnhancedStore,
 } from 'store/cccTypedefs'
@@ -14,6 +13,7 @@ import { PageParagraph } from './PageParagraph'
 import { PageFootnotes } from './PageFootnotes'
 import { PageControls } from './PageControls'
 import { usePageScrollHooks, getParagraphRefKey } from './pageScrollHooks'
+import { useLoadPageContentHook } from './pageHooks'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -32,7 +32,7 @@ export const Page: React.FC<PageProps> = props => {
   const tocId = getPageTocId(cccStore, shortUrl)
 
   useScrollToTopOnPathChange(tocId)
-  const pageNode = getPageNode(cccStore, tocId)
+  const { pageNode } = useLoadPageContentHook(shortUrl)
   const elementRefs = usePageScrollHooks(pageNode, location.search)
 
   if (!pageNode) {
@@ -71,7 +71,7 @@ export const Page: React.FC<PageProps> = props => {
   )
 }
 
-const getShortUrl = (props: PageProps): string => {
+export const getShortUrl = (props: PageProps): string => {
   const fullUrl = props.match.params[PAGE_TOC_ID_MATCH]
   if (!fullUrl) {
     return ''
@@ -82,12 +82,6 @@ const getShortUrl = (props: PageProps): string => {
 
 const getPageTocId = (cccStore: CCCEnhancedStore, shortUrl: string): string => {
   return cccStore.extraMeta.urlMap[shortUrl] || ''
-}
-const getPageNode = (
-  cccStore: CCCEnhancedStore,
-  tocId: string
-): PageNode | undefined => {
-  return cccStore.store.page_nodes[tocId]
 }
 
 const isEmptyParagraph = (paragraph: PageParagraphType): boolean => {
