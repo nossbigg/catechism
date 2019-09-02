@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/catechism/static/css/main.df1fe396.chunk.css",
-    "main.js": "/catechism/static/js/main.a4da8766.chunk.js",
-    "main.js.map": "/catechism/static/js/main.a4da8766.chunk.js.map",
+    "main.js": "/catechism/static/js/main.59f112a1.chunk.js",
+    "main.js.map": "/catechism/static/js/main.59f112a1.chunk.js.map",
     "runtime~main.js": "/catechism/static/js/runtime~main.3c531b9b.js",
     "runtime~main.js.map": "/catechism/static/js/runtime~main.3c531b9b.js.map",
-    "static/js/2.b0a6d8d8.chunk.js": "/catechism/static/js/2.b0a6d8d8.chunk.js",
-    "static/js/2.b0a6d8d8.chunk.js.map": "/catechism/static/js/2.b0a6d8d8.chunk.js.map",
+    "static/js/2.d3c7e60f.chunk.js": "/catechism/static/js/2.d3c7e60f.chunk.js",
+    "static/js/2.d3c7e60f.chunk.js.map": "/catechism/static/js/2.d3c7e60f.chunk.js.map",
     "index.html": "/catechism/index.html",
-    "precache-manifest.983882aebf7cde30a0782d4fc13b7161.js": "/catechism/precache-manifest.983882aebf7cde30a0782d4fc13b7161.js",
+    "precache-manifest.da64cbb6d49acd8df128de42389c50ad.js": "/catechism/precache-manifest.da64cbb6d49acd8df128de42389c50ad.js",
     "service-worker.js": "/catechism/service-worker.js",
     "static/css/main.df1fe396.chunk.css.map": "/catechism/static/css/main.df1fe396.chunk.css.map"
   }
