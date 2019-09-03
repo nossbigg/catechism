@@ -2,10 +2,10 @@ import request from 'request-promise-native'
 import fs from 'fs-extra'
 import path from 'path'
 import { execSync } from 'child_process'
-import { CCCStore } from 'store/cccTypedefs'
+import { CCCStore, TOCLink } from 'store/cccTypedefs'
 import { makeCCCMeta } from '../cccMetaGenerator/cccMetaGenerator'
 import { makeCCCPages, CCCExportedPage } from './makeCCCPages'
-import { CCCLeanStore, CCCMeta } from './typedefs'
+import { CCCLeanStore, CCCMeta, LeanTOCLink } from './typedefs'
 
 export const makeStaticAssets = async () => {
   await prepareDirectory()
@@ -43,8 +43,20 @@ const getCCCReleaseFromRemote = async (): Promise<CCCStore> => {
 }
 
 const makeLeanCCC = (ccc: CCCStore): CCCLeanStore => {
-  const { page_nodes, ...rest } = ccc
-  return rest
+  const { page_nodes, toc_link_tree, ...rest } = ccc
+  return { ...rest, toc_link_tree: toc_link_tree.map(makeLeanTOCLink) }
+}
+
+const makeLeanTOCLink = (link: TOCLink): LeanTOCLink => {
+  const { children, ...rest } = link
+  return { ...rest, ...makeLeanTOCLinkChildren(children) }
+}
+
+const makeLeanTOCLinkChildren = (children: TOCLink[]) => {
+  if (children.length === 0) {
+    return {}
+  }
+  return { children: children.map(makeLeanTOCLink) }
 }
 
 const makeCCCMetadata = async (ccc: CCCStore): Promise<CCCMeta> => {

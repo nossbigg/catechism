@@ -17,7 +17,14 @@ export interface CCCEnhancedStore {
   extraMeta: CCCMeta
 }
 
-export type CCCLeanStore = Omit<CCCStore, 'page_nodes'>
+export type CCCLeanStore = Omit<CCCStore, 'page_nodes' | 'toc_link_tree'> & {
+  toc_link_tree: LeanTOCLink[]
+}
+
+export interface LeanTOCLink {
+  id: string
+  children?: LeanTOCLink[]
+}
 
 export interface LeanPageNode {
   id: string

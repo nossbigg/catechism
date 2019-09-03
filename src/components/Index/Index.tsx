@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { TOCLink, TOCNodes } from 'store/cccTypedefs'
+import { TOCNodes } from 'store/cccTypedefs'
 import { PageMetaMap } from 'cccMetaGenerator/makePageMetaMap'
 import { Layout } from '../Layout/Layout'
 import { makeStyles } from '@material-ui/core'
 import { AppRouteType } from 'components/App'
 import { useScrollToTopOnPathChange } from 'components/common/hooks/useScrollToTopOnRouteChange'
+import { LeanTOCLink } from 'makeStaticAssets/typedefs'
 
 const useStyles = makeStyles({
   container: {
@@ -47,7 +48,7 @@ export const Index: React.FC<IndexProps> = props => {
 }
 
 const renderIndex = (
-  tocTree: TOCLink[],
+  tocTree: LeanTOCLink[],
   tocNodes: TOCNodes,
   pageMetaMap: PageMetaMap,
   styles: Record<string, string>
@@ -63,8 +64,8 @@ const renderIndexNode = (
   tocNodes: TOCNodes,
   pageMetaMap: PageMetaMap
   // eslint-disable-next-line react/display-name
-) => (tocLink: TOCLink, index: number) => {
-  const { children, id } = tocLink
+) => (tocLink: LeanTOCLink, index: number) => {
+  const { children = [], id } = tocLink
   const { text, link } = tocNodes[id]
 
   const renderedChildren =
