@@ -1,6 +1,9 @@
+import {
+  LeanPageNode,
+  LeanPageParagraph,
+} from './../../makeStaticAssets/typedefs'
 import { CCCRefElement } from '../../store/cccTypedefs'
 import { createRef, useState, useEffect } from 'react'
-import { PageNode, PageParagraph } from 'store/cccTypedefs'
 import queryString from 'query-string'
 
 export interface RefsMap {
@@ -13,7 +16,7 @@ export interface WrapperRefMeta {
 }
 
 export const usePageScrollHooks = (
-  page: PageNode | undefined,
+  page: LeanPageNode | undefined,
   locationSearch: string
 ): RefsMap => {
   const pageFilled = page || { id: '', paragraphs: [], footnotes: {} }
@@ -83,7 +86,7 @@ interface CCCRefToParagraphMapper {
 }
 
 const createCCCRefToParagraphMapper = (
-  paragraphs: PageParagraph[]
+  paragraphs: LeanPageParagraph[]
 ): CCCRefToParagraphMapper =>
   paragraphs.reduce((acc, curr, index) => {
     const cccRefs = curr.elements.filter(e => e.type === 'ref-ccc')

@@ -1,7 +1,6 @@
 import React from 'react'
 import { stripUrlShortLink } from 'cccMetaGenerator/makeUrlMap'
-import { PageParagraph as PageParagraphType } from 'store/cccTypedefs'
-import { CCCEnhancedStore } from 'makeStaticAssets/typedefs'
+import { CCCEnhancedStore, LeanPageParagraph } from 'makeStaticAssets/typedefs'
 import { Layout } from 'components/Layout/Layout'
 import { makeStyles } from '@material-ui/styles'
 import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
@@ -82,7 +81,7 @@ const getPageTocId = (cccStore: CCCEnhancedStore, shortUrl: string): string => {
   return cccStore.extraMeta.urlMap[shortUrl] || ''
 }
 
-const isEmptyParagraph = (paragraph: PageParagraphType): boolean => {
+const isEmptyParagraph = (paragraph: LeanPageParagraph): boolean => {
   const { elements } = paragraph
   if (elements.length === 0) {
     return true
@@ -104,7 +103,7 @@ interface TrailingEmptyParagraphAccumulator {
 }
 
 const getTrailingEmptyParagraphIndexes = (
-  paragraphs: PageParagraphType[]
+  paragraphs: LeanPageParagraph[]
 ): Set<number> => {
   const emptyParagraphIndexes = paragraphs.reduceRight<
     TrailingEmptyParagraphAccumulator

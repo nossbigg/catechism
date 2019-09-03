@@ -1,4 +1,12 @@
-import { CCCStore } from '../store/cccTypedefs'
+import {
+  CCCStore,
+  PageFootnotes,
+  PageElementAttributes,
+  RefElement,
+  CCCRefElement,
+  SpacerElement,
+  PageParagraphBaseElement,
+} from '../store/cccTypedefs'
 import { PageMetaMap } from '../cccMetaGenerator/makePageMetaMap'
 import { UrlToTocIdMap } from '../cccMetaGenerator/makeUrlMap'
 import { CCCRefRangeTree } from '../cccMetaGenerator/makeRefRangeTree'
@@ -10,6 +18,36 @@ export interface CCCEnhancedStore {
 }
 
 export type CCCLeanStore = Omit<CCCStore, 'page_nodes'>
+
+export interface LeanPageNode {
+  id: string
+  footnotes: PageFootnotes
+  paragraphs: LeanPageParagraph[]
+}
+
+export interface LeanPageParagraph {
+  elements: LeanPageParagraphElement[]
+  attrs?: PageElementAttributes
+}
+
+export type LeanPageParagraphElement =
+  | LeanTextElement
+  | RefElement
+  | LeanAnchorElement
+  | CCCRefElement
+  | SpacerElement
+
+export interface LeanTextElement extends PageParagraphBaseElement {
+  type: 'text'
+  text: string
+  attrs?: PageElementAttributes
+}
+
+export interface LeanAnchorElement extends PageParagraphBaseElement {
+  type: 'ref-anchor'
+  link: string
+  attrs?: PageElementAttributes
+}
 
 export interface CCCMeta {
   pageMetaMap: PageMetaMap

@@ -35,7 +35,7 @@ export interface PageParagraph {
   attrs: PageElementAttributes
 }
 
-interface PageElementAttributes {
+export interface PageElementAttributes {
   i?: boolean
   b?: boolean
   indent?: boolean
@@ -56,7 +56,7 @@ export type PageParagraphElementType =
   | 'ref-ccc'
   | 'spacer'
 
-interface PageParagraphBaseElement {
+export interface PageParagraphBaseElement {
   type: PageParagraphElementType
 }
 export interface TextElement extends PageParagraphBaseElement {

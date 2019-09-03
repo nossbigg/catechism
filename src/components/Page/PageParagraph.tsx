@@ -1,16 +1,17 @@
 import React from 'react'
-import {
-  PageParagraph as PageParagraphType,
-  PageParagraphElement,
-  TextElement,
-} from '../../store/cccTypedefs'
 import classnames from 'classnames'
 import { makeStyles } from '@material-ui/styles'
 import { WrapperRefMeta } from './pageScrollHooks'
 import { HighlightWrapper } from 'components/HighlightWrapper/HighlightWrapper'
+import {
+  LeanPageParagraph,
+  LeanPageParagraphElement,
+  LeanTextElement,
+  LeanAnchorElement,
+} from 'makeStaticAssets/typedefs'
 
 interface PageParagraphProps {
-  paragraph: PageParagraphType
+  paragraph: LeanPageParagraph
   wrapperRefMeta: WrapperRefMeta
 }
 
@@ -18,7 +19,7 @@ export const PageParagraph: React.FC<PageParagraphProps> = props => {
   const styles = useStyles()
 
   const { paragraph, wrapperRefMeta } = props
-  const { elements, attrs } = paragraph
+  const { elements, attrs = {} } = paragraph
   return (
     <HighlightWrapper refMeta={wrapperRefMeta}>
       <p
@@ -33,7 +34,7 @@ export const PageParagraph: React.FC<PageParagraphProps> = props => {
 }
 
 const renderParagraphElement = (styles: Record<string, string>) => (
-  element: PageParagraphElement,
+  element: LeanPageParagraphElement,
   index: number
 ) => {
   switch (element.type) {
@@ -65,12 +66,11 @@ const renderParagraphElement = (styles: Record<string, string>) => (
 }
 
 interface WithElementStylesProps {
-  element: PageParagraphElement
+  element: LeanTextElement | LeanAnchorElement
 }
 const WithElementStyles: React.FC<WithElementStylesProps> = props => {
   const styles = useStyles()
-  const element = props.element as TextElement
-  const { attrs = {} } = element
+  const { attrs = {} } = props.element
 
   return (
     <span
