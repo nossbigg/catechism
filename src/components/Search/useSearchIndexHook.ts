@@ -3,7 +3,7 @@ import {
   CCCSearchIndexes,
   createEmptyIndexes,
 } from './createSearchIndex'
-import { CCCEnhancedStore } from 'store/cccTypedefs'
+import { CCCEnhancedStore } from 'makeStaticAssets/typedefs'
 import { useState, useEffect } from 'react'
 import { once } from 'ramda'
 

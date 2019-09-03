@@ -1,20 +1,9 @@
-import { makeCCCRefRangeTree, CCCRefRangeTree } from './makeRefRangeTree'
-import { makePageMetaMap, PageMetaMap } from './makePageMetaMap'
-import { makeUrlToTocMap, UrlToTocIdMap } from './makeUrlMap'
-import { makeBreadcrumbsMap, BreadcrumbsMap } from './makeBreadcrumbs'
+import { TocIdToUrlMap, CCCMeta } from './../makeStaticAssets/typedefs'
+import { makeCCCRefRangeTree } from './makeRefRangeTree'
+import { makePageMetaMap } from './makePageMetaMap'
+import { makeUrlToTocMap } from './makeUrlMap'
+import { makeBreadcrumbsMap } from './makeBreadcrumbs'
 import { CCCStore, TOCLink, TOCNodes } from '../store/cccTypedefs'
-
-export interface CCCMeta {
-  pageMetaMap: PageMetaMap
-  urlMap: UrlToTocIdMap
-  cccRefRangeTree: CCCRefRangeTree
-  breadcrumbsMap: BreadcrumbsMap
-}
-
-export interface TocIdToUrlMap {
-  // maps tocId to url
-  [tocId: string]: string
-}
 
 export const makeCCCMeta = (ccc: CCCStore): CCCMeta => {
   const {

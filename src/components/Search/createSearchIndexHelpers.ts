@@ -1,4 +1,5 @@
-import { CCCEnhancedStore, PageNodes } from 'store/cccTypedefs'
+import { PageNodes } from 'store/cccTypedefs'
+import { CCCEnhancedStore } from 'makeStaticAssets/typedefs'
 import {
   PageNode,
   PageParagraph,

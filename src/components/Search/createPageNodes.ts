@@ -1,9 +1,6 @@
 import request from 'request-promise-native'
-import {
-  PageNodes,
-  CCCEnhancedStore,
-  PageNode,
-} from './../../store/cccTypedefs'
+import { PageNodes, PageNode } from './../../store/cccTypedefs'
+import { CCCEnhancedStore } from 'makeStaticAssets/typedefs'
 import { PUBLIC_FOLDER_URL } from 'components/common/config'
 
 export const createPageNodesFromRemote = async (

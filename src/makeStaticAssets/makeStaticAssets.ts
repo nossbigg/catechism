@@ -2,16 +2,17 @@ import request from 'request-promise-native'
 import fs from 'fs-extra'
 import path from 'path'
 import { execSync } from 'child_process'
-import { CCCStore, CCCLeanStore } from 'store/cccTypedefs'
-import { makeCCCMeta, CCCMeta } from '../cccMetaGenerator/cccMetaGenerator'
-import { stripUrlShortLink } from '../cccMetaGenerator/makeUrlMap'
+import { CCCStore } from 'store/cccTypedefs'
+import { makeCCCMeta } from '../cccMetaGenerator/cccMetaGenerator'
+import { makeCCCPages, CCCExportedPage } from './makeCCCPages'
+import { CCCLeanStore, CCCMeta } from './typedefs'
 
 export const makeStaticAssets = async () => {
   await prepareDirectory()
 
   const ccc = await getCCCReleaseFromRemote()
   const cccMeta = await makeCCCMetadata(ccc)
-  const cccPages = await makeCCCStaticPages(ccc, cccMeta)
+  const cccPages = await makeCCCPages(ccc, cccMeta)
   const leanCCC = makeLeanCCC(ccc)
 
   await saveRepoVersionFile(ccc)
@@ -53,23 +54,6 @@ const makeCCCMetadata = async (ccc: CCCStore): Promise<CCCMeta> => {
   return meta
 }
 
-const makeCCCStaticPages = async (
-  ccc: CCCStore,
-  cccMeta: CCCMeta
-): Promise<CCCPage[]> => {
-  const { page_nodes } = ccc
-  const { urlMap } = cccMeta
-
-  return Object.keys(urlMap)
-    .map(fullUrl => {
-      const shortUrl = stripUrlShortLink(fullUrl)
-      const tocId = urlMap[fullUrl]
-      const page = page_nodes[tocId]
-      return { fileName: shortUrl, jsonContent: JSON.stringify(page) }
-    })
-    .filter(page => !!page.jsonContent)
-}
-
 const saveCCC = async (ccc: CCCLeanStore) => {
   log('ccc: saving to disk...')
   await fs.writeFile(STATIC_ASSETS_PATHS.ccc, JSON.stringify(ccc))
@@ -82,7 +66,7 @@ const saveCCCMeta = async (cccMeta: CCCMeta) => {
   log('ccc meta: done!')
 }
 
-const saveCCCPages = async (cccPages: CCCPage[]) => {
+const saveCCCPages = async (cccPages: CCCExportedPage[]) => {
   log('ccc pages: saving to disk...')
   await Promise.all(
     cccPages.map(page => {
@@ -137,11 +121,6 @@ const GITHUB_REQUEST_PARAMETERS = {
   headers: {
     'User-Agent': 'nossbigg/catechism-web',
   },
-}
-
-interface CCCPage {
-  fileName: string
-  jsonContent: string
 }
 
 interface GithubAPIReleaseResponse {

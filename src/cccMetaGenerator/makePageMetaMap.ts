@@ -1,5 +1,6 @@
 import { TOCLink, PageNodes } from '../store/cccTypedefs'
-import { TocIdToUrlMap, getAllTocLinks } from './cccMetaGenerator'
+import { getAllTocLinks } from './cccMetaGenerator'
+import { TocIdToUrlMap } from 'makeStaticAssets/typedefs'
 
 export interface PageMetaMap {
   [tocId: string]: PageMeta

@@ -1,5 +1,3 @@
-import { CCCMeta } from 'cccMetaGenerator/cccMetaGenerator'
-
 export interface CCCStore {
   toc_nodes: TOCNodes
   toc_link_tree: TOCLink[]
@@ -7,8 +5,6 @@ export interface CCCStore {
   ccc_refs: CCCRefs
   meta: CCCStoreMeta
 }
-
-export type CCCLeanStore = Omit<CCCStore, 'page_nodes'>
 
 export interface TOCNodes {
   [toc_node: string]: TOCNode
@@ -122,9 +118,4 @@ interface CCCStoreMeta {
   version: string
   created_at: string
   attribution: string[]
-}
-
-export interface CCCEnhancedStore {
-  store: CCCLeanStore
-  extraMeta: CCCMeta
 }

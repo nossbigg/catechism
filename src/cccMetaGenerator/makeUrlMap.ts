@@ -1,4 +1,4 @@
-import { TocIdToUrlMap } from './cccMetaGenerator'
+import { TocIdToUrlMap } from 'makeStaticAssets/typedefs'
 
 export interface UrlToTocIdMap {
   [url: string]: string

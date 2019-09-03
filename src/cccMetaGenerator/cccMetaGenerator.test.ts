@@ -1,12 +1,12 @@
 import { createMockCCC } from './cccTestFixtures'
 import {
   mergeObjectsProperties,
-  TocIdToUrlMap,
   parseToShortLinkText,
   makeCCCMeta,
   makeTocToUrlMap,
 } from './cccMetaGenerator'
 import { RangeTreeNode } from './makeRefRangeTree'
+import { TocIdToUrlMap } from 'makeStaticAssets/typedefs'
 
 describe('cccMetaGenerator', () => {
   describe('generating page meta map', () => {

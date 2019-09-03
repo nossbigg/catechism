@@ -1,6 +1,6 @@
 import { PageNodes } from './../../store/cccTypedefs'
 import { createPageSnapshot, CCCPageSnapshot } from './createSearchIndexHelpers'
-import { CCCEnhancedStore } from 'store/cccTypedefs'
+import { CCCEnhancedStore } from 'makeStaticAssets/typedefs'
 import lunr from 'lunr'
 import { createPageNodesFromRemote } from './createPageNodes'
 
