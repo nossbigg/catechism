@@ -1,11 +1,14 @@
+import { TextElement, AnchorElement } from './../store/cccTypedefs'
+import { LeanPageParagraph } from './typedefs'
 import {
   CCCStore,
-  PageFootnotes,
   PageElementAttributes,
   RefElement,
   CCCRefElement,
   SpacerElement,
-  PageParagraphBaseElement,
+  TOCLink,
+  PageNode,
+  PageParagraph,
 } from '../store/cccTypedefs'
 import { PageMetaMap } from '../cccMetaGenerator/makePageMetaMap'
 import { UrlToTocIdMap } from '../cccMetaGenerator/makeUrlMap'
@@ -21,18 +24,15 @@ export type CCCLeanStore = Omit<CCCStore, 'page_nodes' | 'toc_link_tree'> & {
   toc_link_tree: LeanTOCLink[]
 }
 
-export interface LeanTOCLink {
-  id: string
+export type LeanTOCLink = Omit<TOCLink, 'children'> & {
   children?: LeanTOCLink[]
 }
 
-export interface LeanPageNode {
-  id: string
-  footnotes: PageFootnotes
+export type LeanPageNode = Omit<PageNode, 'paragraphs'> & {
   paragraphs: LeanPageParagraph[]
 }
 
-export interface LeanPageParagraph {
+export type LeanPageParagraph = Omit<PageParagraph, 'elements' | 'attrs'> & {
   elements: LeanPageParagraphElement[]
   attrs?: PageElementAttributes
 }
@@ -44,15 +44,11 @@ export type LeanPageParagraphElement =
   | CCCRefElement
   | SpacerElement
 
-export interface LeanTextElement extends PageParagraphBaseElement {
-  type: 'text'
-  text: string
+export type LeanTextElement = Omit<TextElement, 'attrs'> & {
   attrs?: PageElementAttributes
 }
 
-export interface LeanAnchorElement extends PageParagraphBaseElement {
-  type: 'ref-anchor'
-  link: string
+export type LeanAnchorElement = Omit<AnchorElement, 'attrs'> & {
   attrs?: PageElementAttributes
 }
 
