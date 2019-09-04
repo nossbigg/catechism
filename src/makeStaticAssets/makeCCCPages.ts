@@ -1,8 +1,11 @@
 import {
+  filterEmptyAttrs,
+  filterTrailingEmptyParagraphs,
+} from './makeCCCPagesUtils'
+import {
   PageNode,
   PageParagraphElement,
   PageParagraph,
-  PageElementAttributes,
   TextElement,
   AnchorElement,
 } from './../store/cccTypedefs'
@@ -43,7 +46,11 @@ export const makeCCCPages = async (
 
 const makeLeanPage = (page: PageNode): LeanPageNode => {
   const { paragraphs } = page
-  const leanParagraphs = paragraphs.map(makeLeanParagraph)
+
+  const withoutEmptyTrailingParagraphs = filterTrailingEmptyParagraphs(
+    paragraphs
+  )
+  const leanParagraphs = withoutEmptyTrailingParagraphs.map(makeLeanParagraph)
   return { ...page, paragraphs: leanParagraphs }
 }
 
@@ -70,11 +77,6 @@ const makeLeanParagraphElement = (
   }
 
   return element
-}
-
-const filterEmptyAttrs = (attrs: PageElementAttributes) => {
-  const isEmptyAttrs = Object.keys(attrs).length === 0
-  return isEmptyAttrs ? {} : { attrs }
 }
 
 export interface CCCExportedPage {

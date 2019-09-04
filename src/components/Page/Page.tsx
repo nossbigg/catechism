@@ -1,10 +1,6 @@
 import React from 'react'
 import { stripUrlShortLink } from 'cccMetaGenerator/makeUrlMap'
-import {
-  CCCEnhancedStore,
-  LeanPageParagraph,
-  LeanPageNode,
-} from 'makeStaticAssets/typedefs'
+import { CCCEnhancedStore, LeanPageNode } from 'makeStaticAssets/typedefs'
 import { Layout } from 'components/Layout/Layout'
 import { makeStyles } from '@material-ui/styles'
 import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
@@ -38,20 +34,12 @@ export const EnhancedPage: React.FC<EnhancedPageProps> = props => {
   const elementRefs = usePageScrollHooks(pageNode, location.search)
 
   const { paragraphs, footnotes } = pageNode
-  const emptyTrailingParagraphIndexes = getTrailingEmptyParagraphIndexes(
-    paragraphs
-  )
 
   return (
     <>
       <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
       <div className={styles.pageContainer}>
         {paragraphs.map((paragraph, index) => {
-          const isEmptyParagraph = emptyTrailingParagraphIndexes.has(index)
-          if (isEmptyParagraph) {
-            return null
-          }
-
           const wrapperRefMeta = elementRefs[getParagraphRefKey(index)]
 
           return (
@@ -96,50 +84,6 @@ export const getShortUrl = (props: PageProps): string => {
 
 const getPageTocId = (cccStore: CCCEnhancedStore, shortUrl: string): string => {
   return cccStore.extraMeta.urlMap[shortUrl] || ''
-}
-
-const isEmptyParagraph = (paragraph: LeanPageParagraph): boolean => {
-  const { elements } = paragraph
-  if (elements.length === 0) {
-    return true
-  }
-
-  if (elements.length === 1) {
-    const [firstElement] = elements
-    if (firstElement.type === 'spacer') {
-      return true
-    }
-  }
-
-  return false
-}
-
-interface TrailingEmptyParagraphAccumulator {
-  ignoreRest: boolean
-  indexes: number[]
-}
-
-const getTrailingEmptyParagraphIndexes = (
-  paragraphs: LeanPageParagraph[]
-): Set<number> => {
-  const emptyParagraphIndexes = paragraphs.reduceRight<
-    TrailingEmptyParagraphAccumulator
-  >(
-    (acc, paragraph, index) => {
-      if (acc.ignoreRest) {
-        return acc
-      }
-
-      if (isEmptyParagraph(paragraph)) {
-        return { ...acc, indexes: [...acc.indexes, index] }
-      }
-
-      return { ...acc, ignoreRest: true }
-    },
-    { ignoreRest: false, indexes: [] }
-  )
-
-  return new Set(emptyParagraphIndexes.indexes)
 }
 
 const useStyles = makeStyles({
