@@ -9,6 +9,7 @@ export const useLoadPageContentHook = (shortUrl: string) => {
 
   useEffect(() => {
     if (!pageNode || lastShortUrl !== shortUrl) {
+      setPageNode(undefined)
       const loadPageContent = async () => {
         const data = await request({
           uri: `${PUBLIC_FOLDER_URL}/ccc/pages/${shortUrl}.json`,

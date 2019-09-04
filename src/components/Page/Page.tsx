@@ -1,6 +1,10 @@
 import React from 'react'
 import { stripUrlShortLink } from 'cccMetaGenerator/makeUrlMap'
-import { CCCEnhancedStore, LeanPageParagraph } from 'makeStaticAssets/typedefs'
+import {
+  CCCEnhancedStore,
+  LeanPageParagraph,
+  LeanPageNode,
+} from 'makeStaticAssets/typedefs'
 import { Layout } from 'components/Layout/Layout'
 import { makeStyles } from '@material-ui/styles'
 import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
@@ -18,23 +22,20 @@ interface PageRouteParams {
   [PAGE_TOC_ID_MATCH]: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface PageProps extends AppRouteType<PageRouteParams> {}
+interface EnhancedPageProps extends PageProps {
+  pageNode: LeanPageNode
+}
 
-export const Page: React.FC<PageProps> = props => {
-  const { cccStore, location } = props
+export const EnhancedPage: React.FC<EnhancedPageProps> = props => {
+  const { cccStore, location, pageNode } = props
   const styles = useStyles()
 
   const shortUrl = getShortUrl(props)
   const tocId = getPageTocId(cccStore, shortUrl)
 
   useScrollToTopOnPathChange(tocId)
-  const { pageNode } = useLoadPageContentHook(shortUrl)
-  const elementRefs = usePageScrollHooks(pageNode, location.search)
 
-  if (!pageNode) {
-    return null
-  }
+  const elementRefs = usePageScrollHooks(pageNode, location.search)
 
   const { paragraphs, footnotes } = pageNode
   const emptyTrailingParagraphIndexes = getTrailingEmptyParagraphIndexes(
@@ -42,7 +43,7 @@ export const Page: React.FC<PageProps> = props => {
   )
 
   return (
-    <Layout routeHistory={props.history}>
+    <>
       <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
       <div className={styles.pageContainer}>
         {paragraphs.map((paragraph, index) => {
@@ -64,6 +65,22 @@ export const Page: React.FC<PageProps> = props => {
         <PageFootnotes footnotes={footnotes} wrapperRefMetas={elementRefs} />
       </div>
       <PageControls cccStore={cccStore} history={props.history} tocId={tocId} />
+    </>
+  )
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface PageProps extends AppRouteType<PageRouteParams> {}
+
+export const Page: React.FC<PageProps> = props => {
+  const shortUrl = getShortUrl(props)
+  const { pageNode, isLoading } = useLoadPageContentHook(shortUrl)
+
+  return (
+    <Layout routeHistory={props.history}>
+      {isLoading ? null : (
+        <EnhancedPage {...props} pageNode={pageNode as LeanPageNode} />
+      )}
     </Layout>
   )
 }
