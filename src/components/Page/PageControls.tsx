@@ -1,7 +1,7 @@
 import React from 'react'
 import { PageMetaMap } from '../../cccMetaGenerator/makePageMetaMap'
 import { CCCEnhancedStore } from 'makeStaticAssets/typedefs'
-import { Box, IconButton, makeStyles } from '@material-ui/core'
+import { IconButton, makeStyles } from '@material-ui/core'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons'
 import { historyPush } from '../../utils/reactRouterUtils'
 import * as H from 'history'
@@ -23,7 +23,7 @@ export const PageControls: React.FC<PageControlsProps> = props => {
   const hasPrev = hasUrl(prev, pageMetaMap)
 
   return (
-    <Box className={styles.pageControls}>
+    <div className={styles.pageControls}>
       {hasPrev && (
         <IconButton
           className={`${styles.pageControlButton} ${styles.pageLeftButton}`}
@@ -44,7 +44,7 @@ export const PageControls: React.FC<PageControlsProps> = props => {
           <KeyboardArrowRight fontSize='large' />
         </IconButton>
       )}
-    </Box>
+    </div>
   )
 }
 

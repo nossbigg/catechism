@@ -10,7 +10,6 @@ import {
   ListItem,
   ListItemText,
   makeStyles,
-  Box,
 } from '@material-ui/core'
 import { Menu } from '@material-ui/icons'
 import { APP_ROUTES } from 'components/App'
@@ -84,7 +83,7 @@ export const Layout: React.FC<LayoutProps> = props => {
       </HideOnScroll>
       <DummyToolbar />
       <Drawer open={drawerState} onClose={dismissDrawer}>
-        <Box className={styles.list}>
+        <div className={styles.list}>
           <List component='nav' disablePadding>
             <ListItemText disableTypography className={styles.listHeader}>
               Catechism
@@ -102,7 +101,7 @@ export const Layout: React.FC<LayoutProps> = props => {
               Index
             </ListItem>
           </List>
-        </Box>
+        </div>
       </Drawer>
       <div className={styles.backgroundStyle}>
         <Container
