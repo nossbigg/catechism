@@ -1,7 +1,7 @@
 import React from 'react'
 import { stripUrlShortLink } from 'cccMetaGenerator/makeUrlMap'
 import { CCCEnhancedStore, LeanPageNode } from 'makeStaticAssets/typedefs'
-import { Layout } from 'components/Layout/Layout'
+import { Layout, makeDocumentTitle } from 'components/Layout/Layout'
 import { makeStyles } from '@material-ui/styles'
 import { PageBreadcrumbs } from '../PageBreadcrumbs/PageBreadcrumbs'
 import { AppRouteType } from 'components/App'
@@ -11,6 +11,7 @@ import { PageFootnotes } from './PageFootnotes'
 import { PageControls } from './PageControls'
 import { usePageScrollHooks, getParagraphRefKey } from './pageScrollHooks'
 import { useLoadPageContentHook } from './pageHooks'
+import { DocumentTitle } from 'components/common/DocumentTitle'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -37,6 +38,7 @@ export const EnhancedPage: React.FC<EnhancedPageProps> = props => {
 
   return (
     <>
+      {setDocumentTitle(cccStore, tocId)}
       <PageBreadcrumbs store={cccStore} currentPageId={tocId} />
       <div className={styles.pageContainer}>
         {paragraphs.map((paragraph, index) => {
@@ -65,12 +67,20 @@ export const Page: React.FC<PageProps> = props => {
   const { pageNode, isLoading } = useLoadPageContentHook(shortUrl)
 
   return (
-    <Layout routeHistory={props.history}>
+    <Layout
+      routeHistory={props.history}
+      documentTitle={makeDocumentTitle('...')}
+    >
       {isLoading ? null : (
         <EnhancedPage {...props} pageNode={pageNode as LeanPageNode} />
       )}
     </Layout>
   )
+}
+
+const setDocumentTitle = (ccc: CCCEnhancedStore, tocId: string) => {
+  const { text } = ccc.store.toc_nodes[tocId]
+  return <DocumentTitle title={text} />
 }
 
 export const getShortUrl = (props: PageProps): string => {

@@ -16,6 +16,7 @@
     "ramda": "^0.26.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-helmet": "^5.2.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "typescript": "3.5.2"
@@ -58,6 +59,7 @@
     "@types/fs-extra": "^8.0.0",
     "@types/lunr": "^2.3.2",
     "@types/ramda": "^0.26.19",
+    "@types/react-helmet": "^5.0.9",
     "@types/react-router-dom": "^4.3.4",
     "@types/request-promise-native": "^1.0.16",
     "@typescript-eslint/eslint-plugin": "^1.10.2",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { AppRouteType } from 'components/App'
-import { Layout } from 'components/Layout/Layout'
+import { Layout, makeDocumentTitle } from 'components/Layout/Layout'
 import { TextField, IconButton } from '@material-ui/core'
 import { Search as SearchIcon } from '@material-ui/icons'
 import { useSearchIndexHook } from './useSearchIndexHook'
@@ -32,7 +32,10 @@ export const Search: React.FC<SearchProps> = props => {
   }, [doSearch, searchIndex, searchTerm, cccStore])
 
   return (
-    <Layout routeHistory={props.history}>
+    <Layout
+      routeHistory={props.history}
+      documentTitle={makeDocumentTitle('Search')}
+    >
       <div>
         <TextField
           label='Search Term'

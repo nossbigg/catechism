@@ -16,6 +16,7 @@ import { Menu } from '@material-ui/icons'
 import { APP_ROUTES } from 'components/App'
 import { Footer } from 'components/Footer/Footer'
 import * as H from 'history'
+import { DocumentTitle } from 'components/common/DocumentTitle'
 
 const useStyles = makeStyles({
   backgroundStyle: { backgroundColor: 'white' },
@@ -45,6 +46,7 @@ const useStyles = makeStyles({
 type MUIContainerWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false
 
 interface LayoutProps {
+  documentTitle?: string
   routeHistory: H.History
   toolbarContainerWidth?: MUIContainerWidth
   mainContainerWidth?: MUIContainerWidth
@@ -52,13 +54,18 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = props => {
   const styles = useStyles()
-  const { mainContainerWidth, toolbarContainerWidth } = props
+  const {
+    mainContainerWidth,
+    toolbarContainerWidth,
+    documentTitle = DEFAULT_WEBSITE_TITLE,
+  } = props
   const [drawerState, setDrawerState] = useState(false)
 
   const dismissDrawer = () => setDrawerState(false)
 
   return (
     <div>
+      <DocumentTitle title={documentTitle} />
       <HideOnScroll>
         <AppBar color='default' style={{ boxShadow: 'none' }}>
           <Toolbar>
@@ -130,3 +137,6 @@ const DummyToolbar: React.FC = () => {
 
 const DEFAULT_MAIN_CONTAINER_WIDTH = 'md'
 const DEFAULT_TOOLBAR_WIDTH = 'md'
+const DEFAULT_WEBSITE_TITLE = 'Catechism of the Catholic Church'
+
+export const makeDocumentTitle = (suffix: string) => `Catechism | ${suffix}`
