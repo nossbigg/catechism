@@ -82,7 +82,7 @@ export const Page: React.FC<PageProps> = props => {
 
 const setDocumentTitle = (ccc: CCCEnhancedStore, tocId: string) => {
   const { text } = ccc.store.toc_nodes[tocId]
-  return <DocumentTitle title={text} />
+  return <DocumentTitle title={makeDocumentTitle(text)} />
 }
 
 export const getShortUrl = (props: PageProps): string => {
