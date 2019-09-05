@@ -71,7 +71,9 @@ export const Page: React.FC<PageProps> = props => {
       routeHistory={props.history}
       documentTitle={makeDocumentTitle('...')}
     >
-      {isLoading ? null : (
+      {isLoading ? (
+        <></>
+      ) : (
         <EnhancedPage {...props} pageNode={pageNode as LeanPageNode} />
       )}
     </Layout>
