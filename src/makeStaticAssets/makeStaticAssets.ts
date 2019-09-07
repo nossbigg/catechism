@@ -6,6 +6,7 @@ import { CCCStore, TOCLink } from 'store/cccTypedefs'
 import { makeCCCMeta } from '../cccMetaGenerator/cccMetaGenerator'
 import { makeCCCPages, CCCExportedPage } from './makeCCCPages'
 import { CCCLeanStore, CCCMeta, LeanTOCLink } from './typedefs'
+import { makeSitemapXml } from './makeSitemap'
 
 export const makeStaticAssets = async () => {
   await prepareDirectory()
@@ -13,12 +14,14 @@ export const makeStaticAssets = async () => {
   const ccc = await getCCCReleaseFromRemote()
   const cccMeta = await makeCCCMetadata(ccc)
   const cccPages = await makeCCCPages(ccc, cccMeta)
+  const sitemapXml = makeSitemapXml(cccMeta)
   const leanCCC = makeLeanCCC(ccc)
 
   await saveRepoVersionFile(ccc)
   await saveCCC(leanCCC)
   await saveCCCMeta(cccMeta)
   await saveCCCPages(cccPages)
+  await saveSitemapXml(sitemapXml)
 }
 
 const getCCCReleaseFromRemote = async (): Promise<CCCStore> => {
@@ -90,6 +93,12 @@ const saveCCCPages = async (cccPages: CCCExportedPage[]) => {
   log('ccc pages: done!')
 }
 
+const saveSitemapXml = async (sitemapXml: string): Promise<void> => {
+  log('sitemap: saving to disk...')
+  await fs.writeFile(STATIC_ASSETS_PATHS.sitemapXml, sitemapXml)
+  log('sitemap: done!')
+}
+
 const saveRepoVersionFile = async (ccc: CCCStore): Promise<void> => {
   log('repo version: saving to disk...')
 
@@ -123,6 +132,7 @@ const STATIC_ASSETS_PATHS = {
   cccMeta: path.join(STATIC_ASSETS_ROOT, 'cccMeta.json'),
   cccPagesDir: path.join(STATIC_ASSETS_ROOT, 'pages'),
   versionFile: path.join(STATIC_ASSETS_ROOT, 'version.json'),
+  sitemapXml: path.join(STATIC_ASSETS_ROOT, 'sitemap.xml'),
   makePagePath: (fileName: string) =>
     path.join(STATIC_ASSETS_ROOT, 'pages', `${fileName}.json`),
 }
