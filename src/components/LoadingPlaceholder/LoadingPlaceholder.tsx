@@ -1,11 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { PUBLIC_FOLDER_URL } from 'components/common/config'
 
 const cccIconPath = `${PUBLIC_FOLDER_URL}/ccc.svg`
+const DEFAULT_ICON_SHOW_TIMEOUT = 1000
 
-export const LoadingPlaceholder: React.FC = () => {
+interface LoadingPlaceholderProps {
+  showImmediately?: boolean
+}
+
+export const LoadingPlaceholder: React.FC<LoadingPlaceholderProps> = props => {
+  const { showImmediately = false } = props
   const styles = useStlyes()
+
+  const [showIcon, setShowIcon] = useState(showImmediately)
+  const [timer, setTimer] = useState<NodeJS.Timer | undefined>(undefined)
+
+  useEffect(() => {
+    if (!showImmediately && !timer) {
+      const newTimer = setTimeout(() => {
+        setShowIcon(true)
+      }, DEFAULT_ICON_SHOW_TIMEOUT)
+      setTimer(newTimer)
+    }
+
+    return () => {
+      timer && clearTimeout(timer)
+    }
+  }, [showImmediately, timer])
+
+  if (!showIcon) {
+    return null
+  }
 
   return (
     <div className={styles.cccIconContainer}>
@@ -43,11 +69,13 @@ const useStlyes = makeStyles({
   },
 })
 
-export const LoadingPlaceholderMaximized: React.FC = () => {
+export const LoadingPlaceholderMaximized: React.FC<
+  LoadingPlaceholderProps
+> = props => {
   const styles = useMaximizedStyles()
   return (
     <div className={styles.loadingContainer}>
-      <LoadingPlaceholder />
+      <LoadingPlaceholder {...props} />
     </div>
   )
 }

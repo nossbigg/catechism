@@ -33,7 +33,7 @@ export const App: React.FC = () => {
   const withStore = withStoreEnhancer(cccStore as CCCEnhancedStore)
 
   if (!isLoaded) {
-    return <LoadingPlaceholderMaximized />
+    return <LoadingPlaceholderMaximized showImmediately={true} />
   }
 
   return (
