@@ -12,7 +12,6 @@ import { PageControls } from './PageControls'
 import { usePageScrollHooks, getParagraphRefKey } from './pageScrollHooks'
 import { useLoadPageContentHook } from './pageHooks'
 import { DocumentTitle } from 'components/common/DocumentTitle'
-import { LoadingPlaceholder } from 'components/LoadingPlaceholder/LoadingPlaceholder'
 
 export const PAGE_TOC_ID_MATCH = 'PAGE_TOC_ID'
 
@@ -71,12 +70,9 @@ export const Page: React.FC<PageProps> = props => {
     <Layout
       routeHistory={props.history}
       documentTitle={makeDocumentTitle('...')}
+      showLoading={isLoading}
     >
-      {isLoading ? (
-        <LoadingPlaceholder />
-      ) : (
-        <EnhancedPage {...props} pageNode={pageNode as LeanPageNode} />
-      )}
+      <EnhancedPage {...props} pageNode={pageNode as LeanPageNode} />
     </Layout>
   )
 }

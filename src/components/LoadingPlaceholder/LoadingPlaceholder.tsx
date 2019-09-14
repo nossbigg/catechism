@@ -8,28 +8,20 @@ export const LoadingPlaceholder: React.FC = () => {
   const styles = useStlyes()
 
   return (
-    <div className={styles.container}>
-      <div className={styles.cccIconContainer}>
-        <div className={styles.cccIconPlaceholder}>
-          <img
-            src={cccIconPath}
-            height='500px'
-            width='auto'
-            alt='Catechism Icon'
-          />
-        </div>
+    <div className={styles.cccIconContainer}>
+      <div className={styles.cccIconPlaceholder}>
+        <img
+          src={cccIconPath}
+          height='300px'
+          width='auto'
+          alt='Catechism Icon'
+        />
       </div>
     </div>
   )
 }
 
 const useStlyes = makeStyles({
-  container: {
-    display: 'flex',
-    height: '100vh',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   '@keyframes cccIconAnimation': {
     '0%': { backgroundColor: 'rgb(215,202,47)' },
     '50%': { backgroundColor: 'rgb(255,245,129)' },
@@ -38,6 +30,7 @@ const useStlyes = makeStyles({
   cccIconContainer: {
     backgroundColor: 'rgb(215,202,47)',
     maskImage: `url(${cccIconPath})`,
+    maskRepeat: 'no-repeat',
     animationName: '$cccIconAnimation',
     animationDuration: '0.75s',
     animationIterationCount: 'infinite',
@@ -61,8 +54,8 @@ export const LoadingPlaceholderMaximized: React.FC = () => {
 
 const useMaximizedStyles = makeStyles({
   loadingContainer: {
-    height: '100%',
-    width: '100%',
+    height: '100vh',
+    width: '100vw',
     display: 'flex',
     backgroundColor: 'white',
     justifyContent: 'center',

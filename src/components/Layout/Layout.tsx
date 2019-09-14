@@ -12,9 +12,15 @@ import { APP_ROUTES } from 'components/App'
 import { Footer } from 'components/Footer/Footer'
 import * as H from 'history'
 import { DocumentTitle } from 'components/common/DocumentTitle'
+import { LoadingPlaceholder } from 'components/LoadingPlaceholder/LoadingPlaceholder'
 
 const useStyles = makeStyles({
   backgroundStyle: { backgroundColor: 'white' },
+  loadingPlaceholderContainer: {
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+  },
   appBar: {
     fontFamily: 'Cinzel',
     display: 'flex',
@@ -32,6 +38,7 @@ type MUIContainerWidth = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false
 interface LayoutProps {
   documentTitle?: string
   routeHistory: H.History
+  showLoading?: boolean
   toolbarContainerWidth?: MUIContainerWidth
   mainContainerWidth?: MUIContainerWidth
 }
@@ -41,6 +48,7 @@ export const Layout: React.FC<LayoutProps> = props => {
   const {
     mainContainerWidth,
     toolbarContainerWidth,
+    showLoading = false,
     documentTitle = DEFAULT_WEBSITE_TITLE,
   } = props
 
@@ -69,7 +77,13 @@ export const Layout: React.FC<LayoutProps> = props => {
         <Container
           maxWidth={mainContainerWidth || DEFAULT_MAIN_CONTAINER_WIDTH}
         >
-          {props.children}
+          {showLoading ? (
+            <div className={styles.loadingPlaceholderContainer}>
+              <LoadingPlaceholder />
+            </div>
+          ) : (
+            props.children
+          )}
         </Container>
       </div>
       <Footer />
