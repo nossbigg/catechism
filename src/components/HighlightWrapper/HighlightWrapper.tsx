@@ -32,6 +32,7 @@ const useStyles = makeStyles({
   },
   highlighted: {
     backgroundColor: '#247300cc',
+    transitionDuration: '0s',
   },
 })
 

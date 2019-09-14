@@ -3,7 +3,7 @@ import {
   LeanPageParagraph,
 } from './../../makeStaticAssets/typedefs'
 import { CCCRefElement } from '../../store/cccTypedefs'
-import { createRef, useState, useEffect } from 'react'
+import { createRef, useState, useEffect, useCallback } from 'react'
 import queryString from 'query-string'
 
 export interface RefsMap {
@@ -26,41 +26,72 @@ export const usePageScrollHooks = (
   const footnoteKeys = Object.keys(footnotes).map(getFootnoteRefKey)
   const cccRefToParagraphMapper = createCCCRefToParagraphMapper(paragraphs)
 
-  const [currentFocusedElement, setCurrentFocusedElement] = useState(
-    getCurrentFocusedElement(locationSearch)
-  )
-  const [elementRefs, setElementRefs] = useState(
-    createItemRefs(
-      [...paragraphKeys, ...footnoteKeys],
-      currentFocusedElement,
-      cccRefToParagraphMapper
-    )
+  const [shouldUpdate, setShouldUpdate] = useState(false)
+  const [lastFocusedElement, setLastFocusedElement] = useState('')
+  const [focusedElement, setFocusedElement] = useState('')
+
+  const makeUpdatedElementRefs = useCallback(
+    () =>
+      makeItemRefs(
+        [...paragraphKeys, ...footnoteKeys],
+        focusedElement,
+        cccRefToParagraphMapper
+      ),
+    [paragraphKeys, footnoteKeys, cccRefToParagraphMapper, focusedElement]
   )
 
+  const [elementRefs, setElementRefs] = useState(makeUpdatedElementRefs())
+
   useEffect(() => {
-    if (currentFocusedElement === '') {
+    if (shouldUpdate) {
       return
     }
+
+    const newFocusedElement = getCurrentFocusedElement(locationSearch)
+    if (lastFocusedElement !== newFocusedElement) {
+      setShouldUpdate(true)
+      setFocusedElement(newFocusedElement)
+    }
+  }, [shouldUpdate, locationSearch, lastFocusedElement, setShouldUpdate])
+
+  useEffect(() => {
+    if (!shouldUpdate) {
+      return
+    }
+    setShouldUpdate(false)
+    setLastFocusedElement(focusedElement)
 
     const resolvedElementKey = resolveFocusedElementKey(
       cccRefToParagraphMapper,
-      currentFocusedElement
+      focusedElement
     )
-    const focusedElement = elementRefs[resolvedElementKey]
-    if (!focusedElement) {
-      setCurrentFocusedElement('')
+    const focusedElementMeta = elementRefs[resolvedElementKey]
+    if (!focusedElementMeta) {
+      setFocusedElement('')
       return
     }
 
-    scrollToElement(focusedElement)
-    setElementRefs(resetElementRefs(elementRefs, resolvedElementKey))
-    setCurrentFocusedElement('')
-  }, [currentFocusedElement, elementRefs, cccRefToParagraphMapper])
+    setElementRefs(makeUpdatedElementRefs())
+    scrollToElement(focusedElementMeta)
+
+    setImmediate(() => {
+      setElementRefs(makeResettedElementRefs(elementRefs, resolvedElementKey))
+      setFocusedElement('')
+    })
+  }, [
+    makeUpdatedElementRefs,
+    cccRefToParagraphMapper,
+    elementRefs,
+    focusedElement,
+    shouldUpdate,
+    footnoteKeys,
+    paragraphKeys,
+  ])
 
   return elementRefs
 }
 
-const createItemRefs = (
+const makeItemRefs = (
   keys: string[],
   focusedElementKey: string,
   cccRefToParagraphMapper: CCCRefToParagraphMapper
@@ -79,6 +110,17 @@ const createItemRefs = (
     }),
     {}
   )
+}
+
+const makeResettedElementRefs = (
+  elementRefs: RefsMap,
+  keyToReset: string
+): RefsMap => {
+  const updatedElementRef: WrapperRefMeta = {
+    ...elementRefs[keyToReset],
+    highlighted: false,
+  }
+  return { ...elementRefs, [keyToReset]: updatedElementRef }
 }
 
 interface CCCRefToParagraphMapper {
@@ -100,17 +142,6 @@ const createCCCRefToParagraphMapper = (
       [getCCCRefKey(cccRef.ref_number)]: getParagraphRefKey(index),
     }
   }, {})
-
-const resetElementRefs = (
-  elementRefs: RefsMap,
-  keyToReset: string
-): RefsMap => {
-  const updatedElementRef: WrapperRefMeta = {
-    ...elementRefs[keyToReset],
-    highlighted: false,
-  }
-  return { ...elementRefs, [keyToReset]: updatedElementRef }
-}
 
 export const getParagraphRefKey = (index: number) => `paragraph-${index + 1}`
 
