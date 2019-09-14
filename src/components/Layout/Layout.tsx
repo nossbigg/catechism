@@ -1,17 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
-  Drawer,
   AppBar,
   Toolbar,
   useScrollTrigger,
   Slide,
   Container,
-  List,
-  ListItem,
-  ListItemText,
   makeStyles,
 } from '@material-ui/core'
-import { Menu } from '@material-ui/icons'
+import { Link } from 'react-router-dom'
 import { APP_ROUTES } from 'components/App'
 import { Footer } from 'components/Footer/Footer'
 import * as H from 'history'
@@ -19,26 +15,15 @@ import { DocumentTitle } from 'components/common/DocumentTitle'
 
 const useStyles = makeStyles({
   backgroundStyle: { backgroundColor: 'white' },
-  list: {
-    fontFamily: 'Cinzel',
-    width: 250,
-  },
-  listHeader: {
-    fontSize: '1.5em',
-    padding: 20,
-    margin: 0,
-    marginTop: 10,
-    borderBottom: '1px solid gray',
-  },
-  listItem: { padding: 20 },
   appBar: {
     fontFamily: 'Cinzel',
     display: 'flex',
     alignItems: 'center',
     fontSize: '1.4em',
   },
-  menuIcon: {
-    marginRight: 10,
+  catechismAppBarText: {
+    color: 'black',
+    textDecoration: 'none',
   },
 })
 
@@ -58,9 +43,6 @@ export const Layout: React.FC<LayoutProps> = props => {
     toolbarContainerWidth,
     documentTitle = DEFAULT_WEBSITE_TITLE,
   } = props
-  const [drawerState, setDrawerState] = useState(false)
-
-  const dismissDrawer = () => setDrawerState(false)
 
   return (
     <div>
@@ -72,37 +54,17 @@ export const Layout: React.FC<LayoutProps> = props => {
               maxWidth={toolbarContainerWidth || DEFAULT_TOOLBAR_WIDTH}
               className={styles.appBar}
             >
-              <Menu
-                onClick={() => setDrawerState(true)}
-                className={styles.menuIcon}
-              />
-              Catechism
+              <Link
+                className={styles.catechismAppBarText}
+                to={APP_ROUTES.INDEX}
+              >
+                Catechism
+              </Link>
             </Container>
           </Toolbar>
         </AppBar>
       </HideOnScroll>
       <DummyToolbar />
-      <Drawer open={drawerState} onClose={dismissDrawer}>
-        <div className={styles.list}>
-          <List component='nav' disablePadding>
-            <ListItemText disableTypography className={styles.listHeader}>
-              Catechism
-            </ListItemText>
-            <ListItem
-              button
-              disableGutters
-              className={styles.listItem}
-              onClick={() => {
-                // eslint-disable-next-line fp/no-mutating-methods
-                props.routeHistory.push(APP_ROUTES.INDEX)
-                dismissDrawer()
-              }}
-            >
-              Index
-            </ListItem>
-          </List>
-        </div>
-      </Drawer>
       <div className={styles.backgroundStyle}>
         <Container
           maxWidth={mainContainerWidth || DEFAULT_MAIN_CONTAINER_WIDTH}
