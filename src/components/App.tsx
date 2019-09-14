@@ -9,7 +9,7 @@ import { Search } from './Search/Search'
 import request from 'request-promise-native'
 import { FLAG_ENABLE_SEARCH_PAGE } from 'components/common/featureFlags'
 import { PUBLIC_FOLDER_URL } from 'components/common/config'
-import { LoadingPlaceholder } from './LoadingPlaceholder/LoadingPlaceholder'
+import { LoadingPlaceholderMaximized } from './LoadingPlaceholder/LoadingPlaceholder'
 
 type AppRouteKeys = 'HOME' | 'PAGE' | 'INDEX' | 'CCC_REFERENCE' | 'SEARCH'
 type AppRoutes = Record<AppRouteKeys, string>
@@ -33,7 +33,7 @@ export const App: React.FC = () => {
   const withStore = withStoreEnhancer(cccStore as CCCEnhancedStore)
 
   if (!isLoaded) {
-    return <LoadingPlaceholder />
+    return <LoadingPlaceholderMaximized />
   }
 
   return (

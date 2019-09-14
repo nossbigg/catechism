@@ -49,3 +49,22 @@ const useStlyes = makeStyles({
     opacity: 0,
   },
 })
+
+export const LoadingPlaceholderMaximized: React.FC = () => {
+  const styles = useMaximizedStyles()
+  return (
+    <div className={styles.loadingContainer}>
+      <LoadingPlaceholder />
+    </div>
+  )
+}
+
+const useMaximizedStyles = makeStyles({
+  loadingContainer: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+  },
+})
