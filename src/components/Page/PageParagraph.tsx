@@ -9,6 +9,7 @@ import {
   LeanTextElement,
   LeanAnchorElement,
 } from 'makeStaticAssets/typedefs'
+import { PageElementAttributes } from 'store/cccTypedefs'
 
 interface PageParagraphProps {
   paragraph: LeanPageParagraph
@@ -69,19 +70,29 @@ interface WithElementStylesProps {
   element: LeanTextElement | LeanAnchorElement
 }
 const WithElementStyles: React.FC<WithElementStylesProps> = props => {
-  const styles = useStyles()
-  const { attrs = {} } = props.element
+  const { children, element } = props
+  const { attrs } = element
 
   return (
-    <span
-      className={classnames(styles.elementTextDefaults, {
-        [styles.elementTextBold]: attrs.b,
-        [styles.elementTextItalicised]: attrs.i,
-      })}
-    >
-      {props.children}
+    <span>
+      <BoldHOC attrs={attrs}>
+        <ItalicHOC attrs={attrs}>{children}</ItalicHOC>
+      </BoldHOC>
     </span>
   )
+}
+
+interface StyleHOCProps {
+  attrs?: PageElementAttributes
+}
+
+const BoldHOC: React.FC<StyleHOCProps> = props => {
+  const { attrs = {}, children } = props
+  return attrs.b ? <b>{children}</b> : <>{children}</>
+}
+const ItalicHOC: React.FC<StyleHOCProps> = props => {
+  const { attrs = {}, children } = props
+  return attrs.i ? <i>{children}</i> : <>{children}</>
 }
 
 const useStyles = makeStyles({
@@ -99,14 +110,5 @@ const useStyles = makeStyles({
     borderLeft: '3px solid #b5b129',
     marginLeft: -13,
     paddingLeft: 10,
-  },
-  elementTextDefaults: {
-    display: 'inline',
-  },
-  elementTextBold: {
-    fontWeight: 'bold',
-  },
-  elementTextItalicised: {
-    fontStyle: 'italic',
   },
 })
