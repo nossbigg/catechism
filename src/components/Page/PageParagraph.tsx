@@ -42,7 +42,11 @@ const renderParagraphElement = (styles: Record<string, string>) => (
     case 'spacer':
       return <br key={index} />
     case 'ref':
-      return <sup key={index}>{element.number}</sup>
+      return (
+        <sup key={index} className={styles.sup}>
+          {element.number}
+        </sup>
+      )
     case 'ref-anchor':
       return (
         <WithElementStyles element={element} key={index}>
@@ -110,5 +114,9 @@ const useStyles = makeStyles({
     borderLeft: '3px solid #b5b129',
     marginLeft: -13,
     paddingLeft: 10,
+  },
+  sup: {
+    fontSize: '0.75em',
+    lineHeight: 0,
   },
 })
