@@ -1,7 +1,7 @@
 # Contributing
 
 ## Dev Setup
-1. Clone this repository:
+1. Clone this repository
 ```bash
 git clone https://github.com/nossbigg/catechism.git
 ```
