@@ -1,7 +1,6 @@
 import React from 'react'
+import { ContentsPage } from './contents/ContentsPage'
 
-const Index: React.FC = () => {
-  return 'hello world'
-}
+const IndexPage: React.FC = ContentsPage
 
-export default Index
+export default IndexPage
