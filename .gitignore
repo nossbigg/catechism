@@ -26,3 +26,4 @@ yarn-error.log*
 # generated ccc static files
 build_local
 public/ccc
+.cache
