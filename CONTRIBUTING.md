@@ -2,6 +2,9 @@
 
 ## Dev Setup
 1. Clone this repository
+```bash
+git clone https://github.com/nossbigg/catechism.git
+```
 2. Install JS dependencies 
 ```bash
 yarn
@@ -20,10 +23,10 @@ yarn start
 ```bash
 yarn deploy
 ```
-This step does the following tasks
-- Download latest CCC static assets
+This step does the following tasks:
+- Downloads latest CCC static assets
 - Creates production build
-- Pushes build to associated github pages site
+- Pushes build to associated Github Pages site
 
 ### Run tests
 ```bash
